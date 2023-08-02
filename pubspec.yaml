@@ -19,7 +19,11 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
+<<<<<<< HEAD
   sdk: '>=3.0.5 <4.0.0'
+=======
+  sdk: '>=2.19.6 <4.0.0'
+>>>>>>> f1aa164d364f309d848f291bc72f5490da4f71ab
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -90,5 +94,10 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+<<<<<<< HEAD
   assets:
     - assets/images/splash.jpg
+=======
+assets :
+ -assets/images/logo2.png
+>>>>>>> f1aa164d364f309d848f291bc72f5490da4f71ab
