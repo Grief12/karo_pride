@@ -10,10 +10,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
-    return const Placeholder();
-=======
-
     return Scaffold(
       backgroundColor: Colors.grey[300],
       appBar: AppBar(
@@ -47,6 +43,5 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
->>>>>>> f1aa164d364f309d848f291bc72f5490da4f71ab
   }
 }

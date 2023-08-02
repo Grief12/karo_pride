@@ -94,10 +94,6 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
-<<<<<<< HEAD
   assets:
     - assets/images/splash.jpg
-=======
-assets :
- -assets/images/logo2.png
->>>>>>> f1aa164d364f309d848f291bc72f5490da4f71ab
+

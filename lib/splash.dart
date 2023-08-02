@@ -45,17 +45,9 @@ class _LoadScreenState extends State<LoadScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-<<<<<<< HEAD
       body: Center(
         child: Image.asset(
           "assets/images/splash.jpg",
-=======
-
-      body: Center(),
-      body: Center(
-        child: Image.asset(
-          "assets/images/logo2.png",
->>>>>>> f1aa164d364f309d848f291bc72f5490da4f71ab
           width: 200,
           height: 200,
         ),
