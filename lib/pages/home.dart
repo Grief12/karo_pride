@@ -1,5 +1,7 @@
-import 'package:b_social02/Api.dart';
+
+import 'package:b_social02/components/drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:b_social02/Api.dart';
 import 'Post.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -11,12 +13,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  //sign out
   Api api = Api();
-
   void signOut() {
     FirebaseAuth.instance.signOut();
   }
-
+  //Navigate To Profile Page
+  void goToProfile() {
+    //pop menu drawer
+    Navigator.pop(context);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,6 +34,10 @@ class _HomePageState extends State<HomePage> {
         actions: <Widget>[
           IconButton(onPressed: signOut, icon: Icon(Icons.logout)),
         ],
+      ),
+      drawer: MyDrawer(
+        onProfileTap: goToProfile,
+        onSignOut: signOut,
       ),
       body: Column(
         children: [
