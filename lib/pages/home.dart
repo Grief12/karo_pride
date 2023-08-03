@@ -1,4 +1,6 @@
+import 'package:b_social02/components/drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -8,6 +10,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  //sign out
+  void signOut() {
+    FirebaseAuth.instance.signOut();
+  }
+
+  //Navigate To Profile Page
+  void goToProfile() {
+    //pop menu drawer
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,6 +29,10 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.grey[900],
         foregroundColor: Colors.white,
         title: Icon(Icons.add),
+      ),
+      drawer: MyDrawer(
+        onProfileTap: goToProfile,
+        onSignOut: signOut,
       ),
       body: Column(
         children: [
