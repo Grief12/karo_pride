@@ -1,5 +1,8 @@
+
 import 'package:b_social02/components/drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:b_social02/Api.dart';
+import 'Post.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class HomePage extends StatefulWidget {
@@ -11,16 +14,15 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   //sign out
+  Api api = Api();
   void signOut() {
     FirebaseAuth.instance.signOut();
   }
-
   //Navigate To Profile Page
   void goToProfile() {
     //pop menu drawer
     Navigator.pop(context);
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +30,10 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: Colors.grey[900],
         foregroundColor: Colors.white,
-        title: Icon(Icons.add),
+        title: const Icon(Icons.add), //drawer disini
+        actions: <Widget>[
+          IconButton(onPressed: signOut, icon: Icon(Icons.logout)),
+        ],
       ),
       drawer: MyDrawer(
         onProfileTap: goToProfile,
@@ -44,11 +49,11 @@ class _HomePageState extends State<HomePage> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(Icons.people),
+                      const Icon(Icons.people),
                       Column(
                         children: [
-                          Text('ini akun'),
-                          Text('ini image'),
+                          const Text('ini akun'),
+                          const Text('ini image'),
                         ],
                       ),
                     ],
@@ -59,6 +64,13 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(onPressed: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => const Create()));
+        api.getPost().then((value) {
+          print(value);
+        });
+      }),
     );
   }
 }
