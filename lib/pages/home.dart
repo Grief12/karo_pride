@@ -1,4 +1,3 @@
-
 import 'package:b_social02/components/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:b_social02/Api.dart';
@@ -18,11 +17,13 @@ class _HomePageState extends State<HomePage> {
   void signOut() {
     FirebaseAuth.instance.signOut();
   }
+
   //Navigate To Profile Page
   void goToProfile() {
     //pop menu drawer
     Navigator.pop(context);
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,47 +31,35 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: Colors.grey[900],
         foregroundColor: Colors.white,
-        title: const Icon(Icons.add), //drawer disini
-        actions: <Widget>[
-          IconButton(onPressed: signOut, icon: Icon(Icons.logout)),
-        ],
       ),
       drawer: MyDrawer(
         onProfileTap: goToProfile,
         onSignOut: signOut,
       ),
-      body: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Container(
-                  color: Colors.white,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Icon(Icons.people),
-                      Column(
-                        children: [
-                          const Text('ini akun'),
-                          const Text('ini image'),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const Create()));
-        api.getPost().then((value) {
-          print(value);
-        });
-      }),
+      body: FutureBuilder(
+          future: api.getPost(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                  itemCount: snapshot.data['data'].length,
+                  itemBuilder: (context, index) {
+                    final post = snapshot.data['data'][index];
+                    return Text(post['message']);
+                  });
+            }
+
+            return Center(child: Text('Tidak terhubung ke internet'));
+          }),
+      floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            setState(() {});
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const Create()));
+            api.getPost().then((value) {
+              print(value);
+            });
+          }),
     );
   }
 }
