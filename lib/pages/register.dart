@@ -1,3 +1,4 @@
+import 'package:b_social02/Api.dart';
 import 'package:b_social02/components/textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
   final confirmPasswordTextController = TextEditingController();
+  Api api = Api();
 
   //sign user up
   void signUp() async {
@@ -35,7 +37,8 @@ class _RegisterPageState extends State<RegisterPage> {
       displayMassage("Passwod don't match");
       return;
     }
-
+    api.registerUser(emailTextController.text,
+        emailTextController.text.split('@')[0], passwordTextController.text);
     //try creating user
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(

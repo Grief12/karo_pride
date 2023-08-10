@@ -1,4 +1,5 @@
 import 'package:b_social02/components/drawer.dart';
+import 'package:b_social02/components/post.dart';
 import 'package:flutter/material.dart';
 import 'package:b_social02/Api.dart';
 import 'Post.dart';
@@ -44,7 +45,7 @@ class _HomePageState extends State<HomePage> {
                   itemCount: snapshot.data['data'].length,
                   itemBuilder: (context, index) {
                     final post = snapshot.data['data'][index];
-                    return Text(post['message']);
+                    return FetchPost(post['username'], post['message']);
                   });
             }
 
