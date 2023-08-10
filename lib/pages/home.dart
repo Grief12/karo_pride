@@ -1,8 +1,5 @@
-import 'package:b_social02/components/drawer.dart';
-import 'package:b_social02/components/post.dart';
 import 'package:flutter/material.dart';
 import 'package:b_social02/Api.dart';
-import 'Post.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class HomePage extends StatefulWidget {
@@ -33,10 +30,6 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.grey[900],
         foregroundColor: Colors.white,
       ),
-      drawer: MyDrawer(
-        onProfileTap: goToProfile,
-        onSignOut: signOut,
-      ),
       body: FutureBuilder(
           future: api.getPost(),
           builder: (context, snapshot) {
@@ -45,21 +38,11 @@ class _HomePageState extends State<HomePage> {
                   itemCount: snapshot.data['data'].length,
                   itemBuilder: (context, index) {
                     final post = snapshot.data['data'][index];
-                    return FetchPost(post['username'], post['message']);
+                    return Text(post['message']);
                   });
             }
 
             return Center(child: Text('Tidak terhubung ke internet'));
-          }),
-      floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () {
-            setState(() {});
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const Create()));
-            api.getPost().then((value) {
-              print(value);
-            });
           }),
     );
   }
