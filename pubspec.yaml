@@ -21,7 +21,6 @@ version: 1.0.0+1
 environment:
   sdk: '>=2.19.6 <4.0.0'
 
-
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
 # consider running `flutter pub upgrade --major-versions`. Alternatively,
@@ -40,6 +39,7 @@ dependencies:
   firebase_auth: ^4.7.2
   persistent_bottom_nav_bar:
   http: ^0.13.5 
+
 
 dev_dependencies:
   flutter_test:

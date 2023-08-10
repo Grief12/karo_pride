@@ -13,8 +13,7 @@ class Api {
   }
 
   Future post(String user, String msg, int like) async {
-    final result = await http.post(
-        Uri.parse("http://192.168.100.19:8000/api/post"),
+    final result = await http.post(Uri.parse("http://192.168.100.19:8000/api/post"),
         body: {"username": user, "message": msg, "likes": like.toString()});
     return json.decode(result.body);
   }
