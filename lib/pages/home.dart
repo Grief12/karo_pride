@@ -33,10 +33,6 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.grey[900],
         foregroundColor: Colors.white,
       ),
-      drawer: MyDrawer(
-        onProfileTap: goToProfile,
-        onSignOut: signOut,
-      ),
       body: FutureBuilder(
           future: api.getPost(),
           builder: (context, snapshot) {
@@ -50,16 +46,6 @@ class _HomePageState extends State<HomePage> {
             }
 
             return Center(child: Text('Tidak terhubung ke internet'));
-          }),
-      floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () {
-            setState(() {});
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const Create()));
-            api.getPost().then((value) {
-              print(value);
-            });
           }),
     );
   }
