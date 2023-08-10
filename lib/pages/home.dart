@@ -12,17 +12,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  //sign out
   Api api = Api();
-  void signOut() {
-    FirebaseAuth.instance.signOut();
-  }
 
-  //Navigate To Profile Page
-  void goToProfile() {
-    //pop menu drawer
-    Navigator.pop(context);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,16 +41,5 @@ class _HomePageState extends State<HomePage> {
 
             return Center(child: Text('Tidak terhubung ke internet'));
           }),
-      floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () {
-            setState(() {});
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const Create()));
-            api.getPost().then((value) {
-              print(value);
-            });
-          }),
-    );
   }
 }
