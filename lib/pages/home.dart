@@ -1,4 +1,5 @@
 import 'package:b_social02/components/drawer.dart';
+import 'package:b_social02/pages/chat.dart';
 import 'package:flutter/material.dart';
 import 'package:b_social02/Api.dart';
 import 'Post.dart';
@@ -24,6 +25,20 @@ class _HomePageState extends State<HomePage> {
     Navigator.pop(context);
   }
 
+  //Navigate To Chat Page
+  void goToChat() {
+    //pop menu drawer
+    Navigator.pop(context);
+
+    //go to Chat
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ChatPage(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,6 +46,12 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: Colors.grey[900],
         foregroundColor: Colors.white,
+        actions: [
+          IconButton(
+            onPressed: signOut,
+            icon: const Icon(Icons.logout),
+          ),
+        ],
       ),
       drawer: MyDrawer(
         onProfileTap: goToProfile,
