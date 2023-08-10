@@ -1,3 +1,4 @@
+import 'package:b_social02/pages/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:b_social02/Api.dart';
@@ -82,6 +83,10 @@ class _CreateState extends State<Create> {
                               .then((value) {
                             print(value);
                           });
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomePage()));
                         },
                         icon: Icon(Icons.send)),
                   ],
