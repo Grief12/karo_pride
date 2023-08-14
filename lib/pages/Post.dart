@@ -1,3 +1,4 @@
+import 'package:b_social02/components/Navbar.dart';
 import 'package:b_social02/pages/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -83,6 +84,10 @@ class _CreateState extends State<Create> {
                               .then((value) {
                             print(value);
                           });
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Navbar()));
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
