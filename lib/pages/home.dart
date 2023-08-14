@@ -1,4 +1,3 @@
-import 'package:b_social02/components/drawer.dart';
 import 'package:b_social02/pages/chat.dart';
 import 'package:flutter/material.dart';
 import 'package:b_social02/Api.dart';
@@ -45,12 +44,6 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: Colors.grey[900],
         foregroundColor: Colors.white,
-        actions: [
-          IconButton(
-            onPressed: signOut,
-            icon: const Icon(Icons.logout),
-          ),
-        ],
       ),
       body: FutureBuilder(
           future: api.getPost(),
