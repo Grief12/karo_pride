@@ -18,7 +18,7 @@ class _NavbarState extends State<Navbar> {
   List<Widget> _buildScren() {
     return [
       HomePage(),
-      ChatPage(),
+      Chat(),
       Create(),
       Profile(),
     ];

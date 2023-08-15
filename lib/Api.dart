@@ -7,9 +7,14 @@ class Api {
   final String urlUser = 'http://192.168.100.19:8000/api/user';
   final String urlChat = 'http://192.168.100.19:8000/api/chat';
 
-
   Future getPost() async {
     final result = await http.get(Uri.parse(urlPost));
+
+    return json.decode(result.body);
+  }
+
+  Future fetchUser() async {
+    final result = await http.get(Uri.parse(urlUser));
 
     return json.decode(result.body);
   }
@@ -32,6 +37,7 @@ class Api {
     });
     return json.decode(result.body);
   }
+
   Future fetchChat() async {
     final result = await http.get(Uri.parse(urlChat));
 

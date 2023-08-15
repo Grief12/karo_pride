@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class MyListTile extends StatelessWidget {
-  final IconData icon;
-  final String text;
+  final String title, text, value;
   final void Function()? onTap;
   const MyListTile({
     super.key,
-    required this.icon,
+    required this.title,
     required this.text,
     required this.onTap,
+    required this.value,
   });
 
   @override
@@ -16,14 +16,10 @@ class MyListTile extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 10.0),
       child: ListTile(
-        leading: Icon(
-          icon,
-          color: Colors.white,
-        ),
         onTap: onTap,
         title: Text(
           text,
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.black),
         ),
       ),
     );

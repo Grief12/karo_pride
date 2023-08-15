@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Profile extends StatefulWidget {
@@ -133,25 +132,6 @@ class dannrow extends StatelessWidget {
           color: Colors.black.withOpacity(0.4),
         )
       ],
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey,
-      appBar: AppBar(
-        title: Text("Profile"),
-        actions: <Widget>[
-          IconButton(
-              onPressed: () {
-                FirebaseAuth.instance.signOut();
-              },
-              icon: Icon(Icons.logout))
-        ],
-        backgroundColor: Colors.black,
-      ),
-      body: Icon(
-        Icons.person,
-        size: 100,
-      ),
     );
   }
 }

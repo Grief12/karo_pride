@@ -2,7 +2,7 @@ import 'package:b_social02/Api.dart';
 import 'package:b_social02/components/textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../components/button.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -41,20 +41,9 @@ class _RegisterPageState extends State<RegisterPage> {
         emailTextController.text.split('@')[0], passwordTextController.text);
     //try creating user
     try {
-      UserCredential userCredential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-              email: emailTextController.text,
-              password: passwordTextController.text);
-
-      //after creating the user, create new document in the cloud firestore called users
-      FirebaseFirestore.instance
-          .collection("Users")
-          .doc(userCredential.user!.email)
-          .set({
-        'username': emailTextController.text.split('@')[0], //initial username
-        'bio': 'Empty bio..' //initialy empty bio
-        //add any additional field as needed
-      });
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailTextController.text,
+          password: passwordTextController.text);
 
       //pop loading circle
       if (context.mounted) Navigator.pop(context);
@@ -94,6 +83,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   height: 200,
                 ),
 
+                const SizedBox(height: 30),
+
                 //email textfield
                 MyTextField(
                   controller: emailTextController,
@@ -101,7 +92,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   obscureText: false,
                 ),
 
-                const SizedBox(height: 5),
+                const SizedBox(height: 10),
                 //password textfield
                 MyTextField(
                   controller: passwordTextController,
@@ -109,7 +100,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   obscureText: true,
                 ),
 
-                const SizedBox(height: 5),
+                const SizedBox(height: 10),
                 //confirm password textfield
                 MyTextField(
                   controller: confirmPasswordTextController,
