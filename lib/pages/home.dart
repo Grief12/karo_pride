@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import 'package:b_social02/pages/chat.dart';
+=======
+import 'package:b_social02/components/post.dart';
+>>>>>>> 405574efa293b65eb3c8df8be9399b7a8e25cb3a
 import 'package:flutter/material.dart';
 import 'package:b_social02/Api.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -53,11 +57,15 @@ class _HomePageState extends State<HomePage> {
                   itemCount: snapshot.data['data'].length,
                   itemBuilder: (context, index) {
                     final post = snapshot.data['data'][index];
-                    return Text(post['message']);
+                    return FetchPost(post['username'], post['message']);
                   });
             }
-
-            return Center(child: Text('Tidak terhubung ke internet'));
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [CircularProgressIndicator(), Text('Please wait')],
+              ),
+            );
           }),
     );
   }
