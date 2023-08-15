@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:b_social02/Api.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -9,22 +10,19 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  //final ref =
+  final currentUser = FirebaseAuth.instance.currentUser!;
+  Api api = Api();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: StreamBuilder(
-            //stream: ref.child(SessionController().UserId.toString()).onValue,
+          child: FutureBuilder(
+            future: api.profile(),
             builder: (context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else if (snapshot.hasData) {
-                Map<dynamic, dynamic> map = snapshot.data.snapshot.value;
+                Map<dynamic, dynamic> map = snapshot.data['data'][0];
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -74,22 +72,25 @@ class _ProfileState extends State<Profile> {
                       height: 40,
                     ),
                     dannrow(
-                      title: 'userName',
+                      title: 'Username',
                       value: map['username'],
                       iconData: Icons.person_outline,
                     ),
                     dannrow(
                       title: 'Bio',
-                      value: map['bio'] == '' ? '' : map['phone'],
+                      value: map['bio'],
                       iconData: Icons.person_outlined,
                     ),
                   ],
                 );
               } else {
                 return Center(
-                  child: Text(
-                    'someting went wrong',
-                    style: Theme.of(context).textTheme.subtitle1,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircularProgressIndicator(),
+                      Text('Please wait')
+                    ],
                   ),
                 );
               }
@@ -133,25 +134,6 @@ class dannrow extends StatelessWidget {
           color: Colors.black.withOpacity(0.4),
         )
       ],
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey,
-      appBar: AppBar(
-        title: Text("Profile"),
-        actions: <Widget>[
-          IconButton(
-              onPressed: () {
-                FirebaseAuth.instance.signOut();
-              },
-              icon: Icon(Icons.logout))
-        ],
-        backgroundColor: Colors.black,
-      ),
-      body: Icon(
-        Icons.person,
-        size: 100,
-      ),
     );
   }
 }
