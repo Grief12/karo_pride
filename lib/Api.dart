@@ -6,6 +6,7 @@ class Api {
   final String urlPost = 'http://192.168.100.19:8000/api/post';
   final String urlUser = 'http://192.168.100.19:8000/api/user';
   final String urlChat = 'http://192.168.100.19:8000/api/chat';
+  final String urlProfil = 'http://192.168.100.19:8000/api/profil';
 
   Future getPost() async {
     final result = await http.get(Uri.parse(urlPost));
