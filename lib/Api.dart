@@ -5,6 +5,7 @@ import 'dart:async';
 class Api {
   final String urlPost = 'http://192.168.100.19:8000/api/post';
   final String urlUser = 'http://192.168.100.19:8000/api/user';
+  final String urlChat = 'http://192.168.100.19:8000/api/chat';
 
   Future getPost() async {
     final result = await http.get(Uri.parse(urlPost));
@@ -19,6 +20,12 @@ class Api {
     return json.decode(result.body);
   }
 
+  Future profile() async {
+    final result = await http.get(Uri.parse(urlUser));
+
+    return json.decode(result.body);
+  }
+
   Future registerUser(
     String email,
     String username,
@@ -29,6 +36,12 @@ class Api {
       "username": username,
       "password": password,
     });
+    return json.decode(result.body);
+  }
+
+  Future fetchChat() async {
+    final result = await http.get(Uri.parse(urlChat));
+
     return json.decode(result.body);
   }
 }
