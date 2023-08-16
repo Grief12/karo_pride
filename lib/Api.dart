@@ -40,8 +40,8 @@ class Api {
     return json.decode(result.body);
   }
 
-  Future fetchChat() async {
-    final result = await http.get(Uri.parse(urlChat));
+  Future fetchChat(String email) async {
+    final result = await http.get(Uri.parse(urlChat + '/${email}'));
 
     return json.decode(result.body);
   }
