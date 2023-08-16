@@ -1,4 +1,4 @@
-import 'package:b_social02/pages/chat.dart';
+import 'package:b_social02/components/post.dart';
 import 'package:flutter/material.dart';
 import 'package:b_social02/Api.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -23,20 +23,6 @@ class _HomePageState extends State<HomePage> {
     Navigator.pop(context);
   }
 
-  //Navigate To Chat Page
-  void goToChat() {
-    //pop menu drawer
-    Navigator.pop(context);
-
-    //go to Chat
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const Chat(),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,11 +39,15 @@ class _HomePageState extends State<HomePage> {
                   itemCount: snapshot.data['data'].length,
                   itemBuilder: (context, index) {
                     final post = snapshot.data['data'][index];
-                    return Text(post['message']);
+                    return FetchPost(post['username'], post['message']);
                   });
             }
-
-            return Center(child: Text('Tidak terhubung ke internet'));
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [CircularProgressIndicator(), Text('Please wait')],
+              ),
+            );
           }),
     );
   }

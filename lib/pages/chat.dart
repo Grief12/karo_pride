@@ -13,6 +13,7 @@ class Chat extends StatefulWidget {
 
 class _ChatState extends State<Chat> {
   Api api = Api();
+  final currentUser = FirebaseAuth.instance.currentUser!;
 
   //instance of auth
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -30,7 +31,7 @@ class _ChatState extends State<Chat> {
   //list user except current user
   Widget _buildUserList() {
     return FutureBuilder(
-      future: api.fetchChat(),
+      future: api.chat(currentUser.email!),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return const Text('error');

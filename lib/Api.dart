@@ -25,6 +25,12 @@ class Api {
     return json.decode(result.body);
   }
 
+  Future chat(String email) async {
+    final result = await http.post(Uri.parse("http://127.0.0.1:8000/api/post"),
+        body: {"email": email});
+    return json.decode(result.body);
+  }
+
   Future profile() async {
     final result = await http.get(Uri.parse(urlUser));
 
