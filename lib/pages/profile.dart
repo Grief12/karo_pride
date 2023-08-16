@@ -19,10 +19,13 @@ class _ProfileState extends State<Profile> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: FutureBuilder(
-            future: api.profile(),
+            future: api.profile(currentUser.email!),
             builder: (context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
-                Map<dynamic, dynamic> map = snapshot.data['data'][0];
+                api.profile(currentUser.email!).then((value) {
+                  print(value);
+                });
+                Map<dynamic, dynamic> map = snapshot.data['data'];
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.start,

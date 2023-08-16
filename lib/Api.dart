@@ -20,9 +20,10 @@ class Api {
     return json.decode(result.body);
   }
 
-  Future profile() async {
-    final result = await http.get(Uri.parse(urlUser));
+  Future profile(String email) async {
+    final result = await http.get(Uri.parse(urlProfil + '/${email}'));
 
+    print(urlUser + '/${email}');
     return json.decode(result.body);
   }
 
