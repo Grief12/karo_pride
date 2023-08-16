@@ -31,7 +31,7 @@ class _ChatState extends State<Chat> {
   //list user except current user
   Widget _buildUserList() {
     return FutureBuilder(
-      future: api.chat(currentUser.email!),
+      future: api.fetchChat(currentUser.email!),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return const Text('error');
