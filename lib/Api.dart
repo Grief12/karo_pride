@@ -3,10 +3,11 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 
 class Api {
-  final String urlPost = 'http://192.168.100.19:8000/api/post';
-  final String urlUser = 'http://192.168.100.19:8000/api/user';
-  final String urlChat = 'http://192.168.100.19:8000/api/chat';
-  final String urlProfil = 'http://192.168.100.19:8000/api/profil';
+  final String urlPost = 'http://api-punya-farrdan.000webhostapp.com/api/post';
+  final String urlUser = 'http://api-punya-farrdan.000webhostapp.com/api/user';
+  final String urlChat = 'http://api-punya-farrdan.000webhostapp.com/api/chat';
+  final String urlProfil =
+      'http://api-punya-farrdan.000webhostapp.com/api/profil';
 
   Future getPost() async {
     final result = await http.get(Uri.parse(urlPost));
