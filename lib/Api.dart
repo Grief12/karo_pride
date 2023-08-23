@@ -3,8 +3,10 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 
 class Api {
-  final String urlPost = 'http://127.0.0.1:8000/api/post';
-  final String urlUser = 'http://127.0.0.1:8000/api/user';
+  final String urlPost = 'http://192.168.100.19:8000/api/post';
+  final String urlUser = 'http://192.168.100.19:8000/api/user';
+  final String urlChat = 'http://192.168.100.19:8000/api/chat';
+  final String urlProfil = 'http://192.168.100.19:8000/api/profil';
 
   Future getPost() async {
     final result = await http.get(Uri.parse(urlPost));
@@ -12,9 +14,28 @@ class Api {
     return json.decode(result.body);
   }
 
-  Future post(String user, String msg, int like) async {
-    final result = await http.post(Uri.parse("http://127.0.0.1:8000/api/post"),
+  Future post(String user, String? msg, like, [var img = null]) async {
+    final result = await http.post(Uri.parse(urlPost),
         body: {"username": user, "message": msg, "likes": like.toString()});
+
+    final res = await http.post(Uri.parse(urlPost), body: {
+      "username": user,
+      "message": msg,
+      "likes": like.toString(),
+      "imgurl": img
+    });
+
+    if (img != null) {
+      return json.decode(res.body);
+    } else {
+      return json.decode(result.body);
+    }
+  }
+
+  Future profile(String email) async {
+    final result = await http.get(Uri.parse(urlProfil + '/${email}'));
+
+    print(urlUser + '/${email}');
     return json.decode(result.body);
   }
 
@@ -28,6 +49,12 @@ class Api {
       "username": username,
       "password": password,
     });
+    return json.decode(result.body);
+  }
+
+  Future fetchChat(String email) async {
+    final result = await http.get(Uri.parse(urlChat + '/${email}'));
+
     return json.decode(result.body);
   }
 }
