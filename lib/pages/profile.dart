@@ -87,9 +87,6 @@ class _ProfileState extends State<Profile> {
                   ],
                 );
               } else {
-                api.profile(currentUser.email!).then((value) {
-                  print(value);
-                });
                 return Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

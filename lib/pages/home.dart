@@ -1,4 +1,5 @@
 import 'package:b_social02/components/post.dart';
+import 'package:b_social02/pages/Post.dart';
 import 'package:flutter/material.dart';
 import 'package:b_social02/Api.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -31,6 +32,15 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.grey[900],
         foregroundColor: Colors.white,
       ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
+        child: Icon(Icons.send),
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Create()));
+        },
+      ),
       body: FutureBuilder(
           future: api.getPost(),
           builder: (context, snapshot) {
@@ -39,7 +49,8 @@ class _HomePageState extends State<HomePage> {
                   itemCount: snapshot.data['data'].length,
                   itemBuilder: (context, index) {
                     final post = snapshot.data['data'][index];
-                    return FetchPost(post['username'], post['message']);
+                    return FetchPost(
+                        post['username'], post['message'], post['imgurl']);
                   });
             }
             return Center(
