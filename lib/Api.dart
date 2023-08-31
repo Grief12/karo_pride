@@ -39,6 +39,13 @@ class Api {
     return json.decode(result.body);
   }
 
+  Future profile(String email) async {
+    final result = await http.get(Uri.parse(urlProfil + '/${email}'));
+
+    print(urlUser + '/${email}');
+    return json.decode(result.body);
+  }
+
   Future registerUser(
     String email,
     String username,
