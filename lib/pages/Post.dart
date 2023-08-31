@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:b_social02/components/Navbar.dart';
-import 'package:b_social02/pages/home.dart';
+//import 'package:b_social02/components/Navbar.dart';
+//import 'package:b_social02/pages/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:b_social02/Api.dart';
@@ -49,7 +49,7 @@ class _CreateState extends State<Create> {
     print('hello');
   }
 
-  void upFoto() async {
+  Future upFoto() async {
     File file = File(pickedFile!.path!);
     String filename = pickedFile!.name;
     String ext = pickedFile!.extension!;
@@ -62,11 +62,9 @@ class _CreateState extends State<Create> {
     final urlImg = await snapshot.ref.getDownloadURL();
 
     try {
-      up.whenComplete(() {
-        setState(() {
-          imgUrl = urlImg;
-        });
-      });
+      await snapshot;
+      await urlImg;
+      api.post(currentUser.email!, postController.text, 0, urlImg);
     } on firebase_storage.FirebaseStorage catch (e) {
       print(e);
     }
@@ -128,36 +126,32 @@ class _CreateState extends State<Create> {
                       ),
                     )),
                     IconButton(
-                        onPressed: () {
+                        onPressed: () async {
+                          //await upFoto();
                           print('berhasil');
 
                           if (_formkey.currentState!.validate()) {
-                            upFoto();
                             if (pickedFile == null &&
                                 postController.text.isNotEmpty) {
                               print('a');
+                              print(pickedFile!.name);
                               api.post(
                                   currentUser.email!, postController.text, 0);
                             } else if (pickedFile != null &&
                                 postController.text.isNotEmpty) {
                               print('b');
-                              api.post(currentUser.email!, postController.text,
-                                  0, imgUrl);
+                              await upFoto();
+                              print('berhasil');
+                              print(pickedFile!.name);
                             } else if (pickedFile != null &&
                                 postController.text.isEmpty) {
                               print('c');
-                              api.post(currentUser.email!, null, 0, imgUrl);
-                            } else if (pickedFile == null &&
-                                postController.text.isNotEmpty) {
-                              print('d');
-                              api.post(
-                                  currentUser.email!, postController.text, 0);
+                              await upFoto();
+                              print(pickedFile!.name);
                             }
                           }
-
-                          setState(() {
-                            pickedFile = null;
-                          });
+                          pickedFile = null;
+                          Navigator.pop(context);
                           //Navigator.push(
                           //    context,
                           //    MaterialPageRoute(

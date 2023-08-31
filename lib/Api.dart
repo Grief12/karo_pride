@@ -15,19 +15,19 @@ class Api {
   }
 
   Future post(String user, String? msg, like, [var img = null]) async {
-    final result = await http.post(Uri.parse(urlPost),
-        body: {"username": user, "message": msg, "likes": like.toString()});
-
-    final res = await http.post(Uri.parse(urlPost), body: {
-      "username": user,
-      "message": msg,
-      "likes": like.toString(),
-      "imgurl": img
-    });
-
     if (img != null) {
+      final res = await http.post(Uri.parse(urlPost), body: {
+        "username": user,
+        "message": msg,
+        "likes": like.toString(),
+        "imgurl": img
+      });
+
       return json.decode(res.body);
     } else {
+      final result = await http.post(Uri.parse(urlPost),
+          body: {"username": user, "message": msg, "likes": like.toString()});
+
       return json.decode(result.body);
     }
   }
