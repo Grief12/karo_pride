@@ -1,8 +1,11 @@
-import 'package:b_social02/components/Navbar.dart';
-import 'package:b_social02/pages/home.dart';
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+//import 'package:b_social02/components/Navbar.dart';
+//import 'package:b_social02/pages/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:b_social02/Api.dart';
+import 'package:file_picker/file_picker.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -21,10 +24,51 @@ class _CreateState extends State<Create> {
   final TextEditingController postController = TextEditingController();
   final currentUser = FirebaseAuth.instance.currentUser!;
   final _formkey = GlobalKey<FormState>();
+  PlatformFile? pickedFile;
+  String? imgUrl;
+
   Api api = Api();
 
   //void
-  void makePost() async {}
+  void insfoto() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      setState(() {
+        pickedFile = result.files.first;
+      });
+    } else {
+      // User canceled the picker
+      setState(() {
+        pickedFile = null;
+      });
+    }
+  }
+
+  void messg() async {
+    print('hello');
+  }
+
+  Future upFoto() async {
+    File file = File(pickedFile!.path!);
+    String filename = pickedFile!.name;
+    String ext = pickedFile!.extension!;
+    final ref =
+        await firebase_storage.FirebaseStorage.instance.ref('$filename.$ext');
+    final up = ref.putFile(file);
+
+    final snapshot = await up.whenComplete(() {});
+
+    final urlImg = await snapshot.ref.getDownloadURL();
+
+    try {
+      await snapshot;
+      await urlImg;
+      api.post(currentUser.email!, postController.text, 0, urlImg);
+    } on firebase_storage.FirebaseStorage catch (e) {
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,10 +96,7 @@ class _CreateState extends State<Create> {
                     padding: EdgeInsets.all(20),
                     child: Center(
                         child: IconButton(
-                            onPressed: () {
-                              print('hello');
-                            },
-                            icon: Icon(Icons.add)))),
+                            onPressed: insfoto, icon: Icon(Icons.add)))),
               ),
               const SizedBox(
                 child: Padding(padding: EdgeInsets.only(bottom: 20)),
@@ -71,6 +112,13 @@ class _CreateState extends State<Create> {
                     Expanded(
                         child: TextFormField(
                       controller: postController,
+                      validator: (value) {
+                        if (value!.isEmpty && pickedFile == null) {
+                          return 'Harap isi foto atau kata-kata';
+                        }
+                        ;
+                        return null;
+                      },
                       minLines: 1,
                       maxLines: 9,
                       decoration: const InputDecoration(
@@ -78,20 +126,40 @@ class _CreateState extends State<Create> {
                       ),
                     )),
                     IconButton(
-                        onPressed: () {
-                          api
-                              .post(currentUser.email!, postController.text, 0)
-                              .then((value) {
-                            print(value);
-                          });
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Navbar()));
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomePage()));
+                        onPressed: () async {
+                          //await upFoto();
+                          print('berhasil');
+
+                          if (_formkey.currentState!.validate()) {
+                            if (pickedFile == null &&
+                                postController.text.isNotEmpty) {
+                              print('a');
+                              print(pickedFile!.name);
+                              api.post(
+                                  currentUser.email!, postController.text, 0);
+                            } else if (pickedFile != null &&
+                                postController.text.isNotEmpty) {
+                              print('b');
+                              await upFoto();
+                              print('berhasil');
+                              print(pickedFile!.name);
+                            } else if (pickedFile != null &&
+                                postController.text.isEmpty) {
+                              print('c');
+                              await upFoto();
+                              print(pickedFile!.name);
+                            }
+                          }
+                          pickedFile = null;
+                          Navigator.pop(context);
+                          //Navigator.push(
+                          //    context,
+                          //    MaterialPageRoute(
+                          //        builder: (context) => Navbar()));
+                          //Navigator.pushReplacement(
+                          //    context,
+                          //    MaterialPageRoute(
+                          //        builder: (context) => HomePage()));
                         },
                         icon: Icon(Icons.send)),
                   ],
