@@ -68,6 +68,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Center(
@@ -82,8 +83,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   width: 200,
                   height: 200,
                 ),
-
-                const SizedBox(height: 30),
 
                 //email textfield
                 MyTextField(

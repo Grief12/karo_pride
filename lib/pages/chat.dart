@@ -38,7 +38,21 @@ class _ChatState extends State<Chat> {
                 itemCount: snapshot.data['data'].length,
                 itemBuilder: (context, index) {
                   final post = snapshot.data['data'][index];
-                  return FetchChat(post['username'], post['message']);
+                  return FetchChat(
+                    post['username'],
+                    post['message'],
+                    () {
+                      //pass the clicked user
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ChatPage(
+                            receiverUsername: post['username'],
+                          ),
+                        ),
+                      );
+                    },
+                  );
                 });
           }
           return Center(
