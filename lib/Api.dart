@@ -21,10 +21,22 @@ class Api {
     return json.decode(result.body);
   }
 
-  Future post(String user, String msg, int like) async {
-    final result = await http.post(Uri.parse("http://127.0.0.1:8000/api/post"),
-        body: {"username": user, "message": msg, "likes": like.toString()});
-    return json.decode(result.body);
+  Future post(String user, String? msg, like, [var img = null]) async {
+    if (img != null) {
+      final res = await http.post(Uri.parse(urlPost), body: {
+        "username": user,
+        "message": msg,
+        "likes": like.toString(),
+        "imgurl": img
+      });
+
+      return json.decode(res.body);
+    } else {
+      final result = await http.post(Uri.parse(urlPost),
+          body: {"username": user, "message": msg, "likes": like.toString()});
+
+      return json.decode(result.body);
+    }
   }
 
   Future profile(String email) async {
