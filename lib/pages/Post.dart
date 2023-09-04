@@ -31,7 +31,8 @@ class _CreateState extends State<Create> {
 
   //void
   void insfoto() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.image, allowedExtensions: ['jpg', 'jpeg', 'png']);
 
     if (result != null) {
       setState(() {
