@@ -41,8 +41,9 @@ dependencies:
   image_picker: ^1.0.2
   http: ^0.13.5
   persistent_bottom_nav_bar:
-  provider: ^6.0.5
-  
+  provider: ^6.0.5  
+  file_picker: ^4.6.1
+  path_provider: ^2.0.13
 
 
 
