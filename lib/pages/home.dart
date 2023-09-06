@@ -1,7 +1,6 @@
 import 'package:b_social02/components/post.dart';
 import 'package:flutter/material.dart';
 import 'package:b_social02/Api.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,9 +12,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   //sign out
   Api api = Api();
-  void signOut() {
-    FirebaseAuth.instance.signOut();
-  }
 
   //Navigate To Profile Page
   void goToProfile() {
@@ -29,7 +25,6 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.grey[300],
       appBar: AppBar(
         backgroundColor: Colors.grey[900],
-        foregroundColor: Colors.white,
       ),
       body: FutureBuilder(
         future: api.getPost(),
