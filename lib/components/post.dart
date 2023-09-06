@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:b_social02/pages/PostProfile.dart';
 
 class FetchPost extends StatefulWidget {
   final String username;
   final String msg;
   final String img;
+  final String like;
+  final String email;
 
-  const FetchPost(this.username, this.msg, this.img);
+  const FetchPost(this.username, this.msg, this.img, this.like, this.email);
 
   @override
   State<FetchPost> createState() => _FetchPostState();
@@ -30,7 +33,16 @@ class _FetchPostState extends State<FetchPost> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(widget.username),
+                      GestureDetector(
+                        child: Text(widget.username),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      PostProfile(widget.email)));
+                        },
+                      ),
                       SizedBox(
                         height: 10,
                       ),
@@ -40,13 +52,19 @@ class _FetchPostState extends State<FetchPost> {
                           height: 200,
                           child: AspectRatio(
                             aspectRatio: 1 / 1,
-                            child:
-                                Image.network(widget.img, fit: BoxFit.contain),
+                            child: Image.network(widget.img, fit: BoxFit.cover),
                           ),
                         ),
                       ),
                       SizedBox(
                         height: 10,
+                      ),
+                      Row(
+                        children: [
+                          IconButton(
+                              onPressed: () {}, icon: Icon(Icons.thumb_up)),
+                          Text(widget.like)
+                        ],
                       ),
                       Text(widget.msg),
                     ],

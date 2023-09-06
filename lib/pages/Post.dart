@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:b_social02/pages/crop.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 //import 'package:b_social02/components/Navbar.dart';
 //import 'package:b_social02/pages/home.dart';
@@ -32,12 +33,16 @@ class _CreateState extends State<Create> {
   //void
   void insfoto() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.image, allowedExtensions: ['jpg', 'jpeg', 'png']);
+        type: FileType.custom, allowedExtensions: ['jpg', 'jpeg', 'png']);
 
     if (result != null) {
       setState(() {
         pickedFile = result.files.first;
       });
+
+      print(pickedFile!.name);
+      // Navigator.push(context,
+      //     MaterialPageRoute(builder: (context) => Crop(image: pickedFile!)));
     } else {
       // User canceled the picker
       setState(() {

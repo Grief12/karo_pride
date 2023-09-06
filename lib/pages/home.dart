@@ -49,8 +49,8 @@ class _HomePageState extends State<HomePage> {
                   itemCount: snapshot.data['data'].length,
                   itemBuilder: (context, index) {
                     final post = snapshot.data['data'][index];
-                    return FetchPost(
-                        post['username'], post['message'], post['imgurl']);
+                    return FetchPost(post['username'], post['message'],
+                        post['imgurl'], post['likes'], post['email']);
                   });
             }
             return Center(
