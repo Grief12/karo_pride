@@ -16,9 +16,8 @@ class ProfileController with ChangeNotifier {
   final currentUser = FirebaseAuth.instance.currentUser!;
   //DatabaseReference ref = FirebaseDatabase.instance.ref().child('user');
   Api api = Api();
-  firebase_storage.FirebaseStorage storage =
-      firebase_storage.FirebaseStorage.instance.ref('profileimage/')
-          as firebase_storage.FirebaseStorage;
+  firebase_storage.FirebaseStorage storage = firebase_storage
+      .FirebaseStorage.instance as firebase_storage.FirebaseStorage;
   final picker = ImagePicker();
 
   XFile? _image;
@@ -33,11 +32,11 @@ class ProfileController with ChangeNotifier {
   }
 
   Future pickGalleryImage(BuildContext context) async {
-    final pickedFile =
-        await picker.pickImage(source: ImageSource.gallery, imageQuality: 100);
+    final pickedFile = await ImagePicker()
+        .pickImage(source: ImageSource.gallery, imageQuality: 100);
 
     if (pickedFile != null) {
-      _image = XFile(pickedFile.path);
+      _image = await XFile(pickedFile.path);
       uploadImage(context);
       notifyListeners();
     }
@@ -97,7 +96,7 @@ class ProfileController with ChangeNotifier {
     setLoading(true);
     firebase_storage.Reference storageRef = firebase_storage
         .FirebaseStorage.instance
-        .ref('/profileImage' + currentUser.email!);
+        .ref('/profileimage' + currentUser.email!);
     firebase_storage.UploadTask uploadTask =
         storageRef.putFile(File(image!.path).absolute);
 
