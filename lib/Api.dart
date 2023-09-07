@@ -51,8 +51,8 @@ class Api {
   }
 
   Future updatepp(String url, String email) async {
-    final result = await http
-        .put(Uri.parse(urlProfil + '/${email}'), body: {"url": url.toString()});
+    final result = await http.put(Uri.parse(urlProfil + '/${email}'),
+        body: {"profile": url.toString()});
     return json.decode(result.body);
   }
 

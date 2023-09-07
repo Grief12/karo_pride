@@ -1,8 +1,11 @@
 import 'dart:io';
+import 'package:b_social02/pages/profile.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import '../../Api.dart';
 import '../profile_textfield.dart';
 
@@ -14,10 +17,11 @@ class ProfileController with ChangeNotifier {
   final _formkey = GlobalKey<FormState>();
 
   final currentUser = FirebaseAuth.instance.currentUser!;
+  PlatformFile? pickedFile;
   //DatabaseReference ref = FirebaseDatabase.instance.ref().child('user');
   Api api = Api();
-  firebase_storage.FirebaseStorage storage = firebase_storage
-      .FirebaseStorage.instance as firebase_storage.FirebaseStorage;
+  firebase_storage.Reference storage =
+      firebase_storage.FirebaseStorage.instance.ref('profileimage/');
   final picker = ImagePicker();
 
   XFile? _image;
@@ -31,14 +35,48 @@ class ProfileController with ChangeNotifier {
     notifyListeners();
   }
 
-  Future pickGalleryImage(BuildContext context) async {
-    final pickedFile = await ImagePicker()
-        .pickImage(source: ImageSource.gallery, imageQuality: 100);
+  void pickGalleryImage() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom, allowedExtensions: ['jpg', 'jpeg', 'png']);
 
-    if (pickedFile != null) {
-      _image = await XFile(pickedFile.path);
-      uploadImage(context);
-      notifyListeners();
+    if (result != null) {
+      pickedFile = result.files.first;
+
+      await upFoto();
+
+      PersistentNavBarNavigator.pushNewScreen(
+        context,
+        screen: Profile(),
+        withNavBar: true,
+        pageTransitionAnimation: PageTransitionAnimation.cupertino,
+      );
+
+      print(pickedFile!.name);
+      // Navigator.push(context,
+      //     MaterialPageRoute(builder: (context) => Crop(image: pickedFile!)));
+    } else {
+      // User canceled the picker
+    }
+  }
+
+  Future upFoto() async {
+    File file = File(pickedFile!.path!);
+    String filename = pickedFile!.name;
+    String ext = pickedFile!.extension!;
+    final ref = await firebase_storage.FirebaseStorage.instance
+        .ref('profileimage/' + '$filename.$ext');
+    final up = ref.putFile(file);
+
+    final snapshot = await up.whenComplete(() {});
+
+    final urlImg = await snapshot.ref.getDownloadURL();
+
+    try {
+      await snapshot;
+      await urlImg;
+      api.updatepp(urlImg, currentUser.email!);
+    } on firebase_storage.FirebaseStorage catch (e) {
+      print(e);
     }
   }
 
@@ -75,7 +113,7 @@ class ProfileController with ChangeNotifier {
                 ),
                 ListTile(
                   onTap: () {
-                    pickGalleryImage(context);
+                    pickGalleryImage();
                     Navigator.pop(context);
                   },
                   leading: Icon(
