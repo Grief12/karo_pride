@@ -20,15 +20,25 @@ class _FetchPostState extends State<FetchPost> {
           Container(
             color: Colors.white,
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Icon(Icons.people),
+                Padding(padding: EdgeInsets.all(15)),
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(widget.username),
                     SizedBox(
                       height: 10,
                     ),
-                    Image.network(widget.img, height: 200, width: 200),
+                    Container(
+                      width: 200,
+                      height: 200,
+                      child: Image.network(
+                        widget.img,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
                     SizedBox(
                       height: 10,
                     ),

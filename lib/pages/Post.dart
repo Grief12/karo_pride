@@ -30,7 +30,7 @@ class _CreateState extends State<Create> {
   Api api = Api();
 
   //void
-  Future insfoto() async {
+  void insfoto() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
 
     if (result != null) {
@@ -57,32 +57,14 @@ class _CreateState extends State<Create> {
         await firebase_storage.FirebaseStorage.instance.ref('$filename.$ext');
     final up = ref.putFile(file);
 
-    final snapshot = await up;
+    final snapshot = await up.whenComplete(() {});
 
     final urlImg = await snapshot.ref.getDownloadURL();
 
     try {
-      up.whenComplete(() {
-        setState(() {
-          imgUrl = urlImg;
-
-          if (_formkey.currentState!.validate()) {
-            if (pickedFile == null && postController.text.isNotEmpty) {
-              print('a');
-              api.post(currentUser.email!, postController.text, 0);
-            }
-            if (pickedFile != null && postController.text.isNotEmpty) {
-              print('b');
-              print(pickedFile!.name);
-              api.post(currentUser.email!, postController.text, 0, imgUrl);
-            }
-            if (pickedFile != null && postController.text.isEmpty) {
-              print('c');
-              api.post(currentUser.email!, null, 0, imgUrl);
-            }
-          }
-        });
-      });
+      await snapshot;
+      await urlImg;
+      api.post(currentUser.email!, postController.text, 0, urlImg);
     } on firebase_storage.FirebaseStorage catch (e) {
       print(e);
     }
@@ -114,10 +96,7 @@ class _CreateState extends State<Create> {
                     padding: EdgeInsets.all(20),
                     child: Center(
                         child: IconButton(
-                            onPressed: () async {
-                              insfoto();
-                            },
-                            icon: Icon(Icons.add)))),
+                            onPressed: insfoto, icon: Icon(Icons.add)))),
               ),
               const SizedBox(
                 child: Padding(padding: EdgeInsets.only(bottom: 20)),
@@ -148,13 +127,39 @@ class _CreateState extends State<Create> {
                     )),
                     IconButton(
                         onPressed: () async {
-                          upFoto;
-
+                          //await upFoto();
                           print('berhasil');
-                          setState(() {
-                            pickedFile = null;
-                          });
+
+                          if (_formkey.currentState!.validate()) {
+                            if (pickedFile == null &&
+                                postController.text.isNotEmpty) {
+                              print('a');
+                              print(pickedFile!.name);
+                              api.post(
+                                  currentUser.email!, postController.text, 0);
+                            } else if (pickedFile != null &&
+                                postController.text.isNotEmpty) {
+                              print('b');
+                              await upFoto();
+                              print('berhasil');
+                              print(pickedFile!.name);
+                            } else if (pickedFile != null &&
+                                postController.text.isEmpty) {
+                              print('c');
+                              await upFoto();
+                              print(pickedFile!.name);
+                            }
+                          }
+                          pickedFile = null;
                           Navigator.pop(context);
+                          //Navigator.push(
+                          //    context,
+                          //    MaterialPageRoute(
+                          //        builder: (context) => Navbar()));
+                          //Navigator.pushReplacement(
+                          //    context,
+                          //    MaterialPageRoute(
+                          //        builder: (context) => HomePage()));
                         },
                         icon: Icon(Icons.send)),
                   ],
