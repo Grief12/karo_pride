@@ -1,8 +1,9 @@
-import 'package:b_social02/components/chat_style.dart';
-import 'package:b_social02/pages/chat_page.dart';
+import 'package:b_social02/pages/chat/chat_page.dart';
+import 'package:b_social02/pages/chat/chat_style.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:b_social02/Api.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 class Chat extends StatefulWidget {
   const Chat({super.key});
@@ -15,6 +16,10 @@ class _ChatState extends State<Chat> {
   Api api = Api();
   final currentUser = FirebaseAuth.instance.currentUser!;
 
+  void signOut() {
+    FirebaseAuth.instance.signOut();
+  }
+
   //instance of auth
   @override
   Widget build(BuildContext context) {
@@ -23,6 +28,12 @@ class _ChatState extends State<Chat> {
       appBar: AppBar(
         title: Text("Chat"),
         backgroundColor: Colors.grey[900],
+        actions: [
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {},
+          )
+        ],
       ),
       body: _buildUserList(),
     );
@@ -35,20 +46,21 @@ class _ChatState extends State<Chat> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(
-                itemCount: snapshot.data['data'].length,
+                itemCount: snapshot.data['akun'].length,
                 itemBuilder: (context, index) {
-                  final post = snapshot.data['data'][index];
+                  final post = snapshot.data['akun'][index];
                   return FetchChat(
                     post['username'],
                     post['message'],
+                    post['penerima_id'],
                     () {
                       //pass the clicked user
-                      Navigator.push(
+                      PersistentNavBarNavigator.pushNewScreen(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => ChatPage(
-                            receiverUsername: post['username'],
-                          ),
+                        withNavBar: false,
+                        screen: ChatPage(
+                          receiverUsername: post['username'],
+                          receiverid: post['penerima_id'],
                         ),
                       );
                     },

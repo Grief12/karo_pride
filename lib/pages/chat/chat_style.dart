@@ -1,15 +1,17 @@
-import 'package:b_social02/pages/chat_page.dart';
+import 'package:b_social02/pages/chat/chat_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class FetchChat extends StatefulWidget {
   final String username;
   final String msg;
+  final int id;
   final void Function()? onTap;
 
   const FetchChat(
     this.username,
     this.msg,
+    this.id,
     this.onTap,
   );
 
@@ -28,6 +30,7 @@ class _FetchChatState extends State<FetchChat> {
           MaterialPageRoute(
             builder: (context) => ChatPage(
               receiverUsername: widget.username,
+              receiverid: widget.id,
             ),
           ),
         );

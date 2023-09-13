@@ -1,12 +1,18 @@
 import 'package:b_social02/Api.dart';
+import 'package:b_social02/components/bubble_chat.dart';
+//import 'package:b_social02/components/bubble_chat.dart';
+import 'package:b_social02/pages/chat/message.dart';
+//import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ChatPage extends StatefulWidget {
   final String receiverUsername;
+  final int receiverid;
   const ChatPage({
     super.key,
     required this.receiverUsername,
+    required this.receiverid,
   });
 
   @override
@@ -17,6 +23,7 @@ class _ChatPageState extends State<ChatPage> {
   Api api = Api();
   final currentUser = FirebaseAuth.instance.currentUser!;
   final TextEditingController postController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,10 +46,50 @@ class _ChatPageState extends State<ChatPage> {
       body: Column(
         children: [
           Expanded(
-            child: Container(
-              color: Colors.white,
+            child: _buildMessageList(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  //list message
+  Widget _buildMessageList() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+      ),
+      child: Column(
+        children: [
+          Expanded(
+            child: FutureBuilder(
+              future: api.getChat(currentUser.email!),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                    itemCount: snapshot.data['data'].length,
+                    itemBuilder: (context, index) {
+                      final post = snapshot.data['data'][index];
+                      return Message(
+                        post['message'],
+                        post['created_at'],
+                      );
+                    },
+                  );
+                }
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircularProgressIndicator(),
+                      Text('Please wait')
+                    ],
+                  ),
+                );
+              },
             ),
           ),
+          //textfield
           Container(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Row(
@@ -50,7 +97,8 @@ class _ChatPageState extends State<ChatPage> {
               children: [
                 Expanded(
                   child: Container(
-                    child: TextField(
+                    child: TextFormField(
+                      controller: postController,
                       minLines: 1,
                       maxLines: 2,
                       decoration: InputDecoration(
@@ -66,9 +114,13 @@ class _ChatPageState extends State<ChatPage> {
                 IconButton(
                     onPressed: () {
                       api
-                          .post(currentUser.email!, postController.text, 0)
+                          .postChat(
+                        currentUser.email!,
+                        postController.text,
+                        widget.receiverid,
+                      )
                           .then((value) {
-                        print(value);
+                        postController.clear();
                       });
                     },
                     icon: Icon(Icons.send)),
