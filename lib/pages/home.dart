@@ -14,8 +14,41 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   //sign out
   Api api = Api();
+
   void signOut() {
     FirebaseAuth.instance.signOut();
+  }
+
+  Future<void> refresh() {
+    setState(() {
+      FutureBuilder(
+          future: api.getPost(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                  itemCount: snapshot.data['data']['post'].length,
+                  itemBuilder: (context, index) {
+                    final post = snapshot.data['data']['post'][index];
+                    final like = snapshot.data['data']['like'];
+                    return FetchPost(
+                        post['id'],
+                        post['username'],
+                        post['message'],
+                        post['imgurl'],
+                        post['likes'],
+                        post['email'],
+                        like);
+                  });
+            }
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [CircularProgressIndicator(), Text('Please wait')],
+              ),
+            );
+          });
+    });
+    return api.getPost();
   }
 
   //Navigate To Profile Page
@@ -45,13 +78,23 @@ class _HomePageState extends State<HomePage> {
           future: api.getPost(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return ListView.builder(
-                  itemCount: snapshot.data['data'].length,
-                  itemBuilder: (context, index) {
-                    final post = snapshot.data['data'][index];
-                    return FetchPost(post['username'], post['message'],
-                        post['imgurl'], post['likes'], post['email']);
-                  });
+              return RefreshIndicator(
+                child: ListView.builder(
+                    itemCount: snapshot.data['data']['post'].length,
+                    itemBuilder: (context, index) {
+                      final post = snapshot.data['data']['post'][index];
+                      final like = snapshot.data['data']['like'];
+                      return FetchPost(
+                          post['id'],
+                          post['username'],
+                          post['message'],
+                          post['imgurl'],
+                          post['likes'],
+                          post['email'],
+                          like);
+                    }),
+                onRefresh: refresh,
+              );
             }
             return Center(
               child: Column(
