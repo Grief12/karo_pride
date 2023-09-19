@@ -3,14 +3,63 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 
 class Api {
-  final String urlPost = 'http://192.168.100.20:8000/api/post';
-  final String urlUser = 'http://192.168.100.20:8000/api/user';
-  final String urlChat = 'http://192.168.100.20:8000/api/chat';
-  final String urlProfil = 'http://192.168.100.20:8000/api/profil';
+  final String urlPost = 'http://127.0.0.1:8000/api/post';
+  final String urlUser = 'http://127.0.0.1:8000/api/user';
+  final String urlChat = 'http://127.0.0.1:8000/api/chat';
+  final String urlProfil = 'http://127.0.0.1:8000/api/profil';
+  final String urlKomen = 'http://127.0.0.1:8000/api/komen';
   Future getPost() async {
     final result = await http.get(Uri.parse(urlPost));
 
     return json.decode(result.body);
+  }
+
+  Future like(int like, id, bool pressed) async {
+    print("id post ke ${id}");
+    if (pressed == true && like > 0) {
+      like = like - 1;
+    } else if (pressed != true && like == 0) {
+      like = like + 1;
+    } else if (pressed != true && like > 0) {
+      like = like + 1;
+    }
+
+    print("like post ke ${like}");
+    final result = await http.post(Uri.parse(urlPost + '/like/${id}'), body: {
+      "likes": like.toString(),
+    });
+
+    print(json.decode(result.body));
+    return json.decode(result.body);
+  }
+
+  Future fetchLike(id) async {
+    final result = await http.get(Uri.parse(urlPost + '/like/${id}'));
+    return json.decode(result.body);
+  }
+
+  Future postLikeConfirm(id, bool pressed, email) async {
+    if (pressed == true) {
+      int confirm = 1;
+
+      final result =
+          await http.post(Uri.parse(urlPost + '/like/${id}/${email}'), body: {
+        "confirm": confirm.toString(),
+      });
+      print("data berhasil dipost");
+      return json.decode(result.body);
+    }
+
+    if (pressed == false) {
+      int confirm = 0;
+
+      final result =
+          await http.post(Uri.parse(urlPost + '/like/${id}/${email}'), body: {
+        "confirm": confirm.toString(),
+      });
+      print("data berhasil dipost");
+      return json.decode(result.body);
+    }
   }
 
   Future post(String user, String? msg, like, [var img = null]) async {
@@ -83,5 +132,15 @@ class Api {
     return json.decode(result.body);
   }
 
-  void updateusername(String s, String text, int i) {}
+  Future fetchKomen(int id) async {
+    final result = await http.get(Uri.parse(urlKomen + '/${id}'));
+    return json.decode(result.body);
+  }
+
+  Future postKomen(String pesan, int id, String email) async {
+    final result = await http.get(Uri.parse(urlKomen + '/${id}'));
+
+    return json.decode(result.body);
+  }
+
 }
