@@ -138,8 +138,11 @@ class Api {
   }
 
   Future postKomen(String pesan, int id, String email) async {
-    final result = await http.get(Uri.parse(urlKomen + '/${id}'));
-
+    print("berhasil");
+    print(id);
+    final result = await http.post(Uri.parse(urlKomen + '/${id}'),
+        body: {"pesan": pesan, "email": email});
+    print("berhasil di post");
     return json.decode(result.body);
   }
 

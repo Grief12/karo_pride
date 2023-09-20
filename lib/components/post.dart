@@ -29,7 +29,6 @@ class _FetchPostState extends State<FetchPost> {
   //late final confirm = loopment();
   final currentUser = FirebaseAuth.instance.currentUser!;
   late final jsonData = Api().fetchLike(widget.id);
-  TextEditingController commentCotroller = TextEditingController();
   bool pressed = true;
   int arrLengthh = 0;
   var arrData;
@@ -70,7 +69,7 @@ class _FetchPostState extends State<FetchPost> {
   }
 
   loopment(panjang) {
-    for (int i = 0; i < panjang.length; i++) {
+    for (int i = 0; i < widget.arrLikes.length; i++) {
       if (widget.id == widget.arrLikes[i]['post_id']) {
         if (currentUser.email == widget.arrLikes[i]['email']) {
           setState(() {
@@ -181,11 +180,11 @@ class _FetchPostState extends State<FetchPost> {
                           ),
                           IconButton(
                               onPressed: () {
-                                PersistentNavBarNavigator.pushNewScreen(
-                                  context,
-                                  screen: Comment(widget.id),
-                                  withNavBar: true,
-                                );
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            Comment(widget.id)));
                               },
                               icon: Icon(Icons.comment_outlined))
                         ],
