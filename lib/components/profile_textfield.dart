@@ -27,6 +27,7 @@ class ProfileTextField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       focusNode: focusNode,
+      maxLength: 21,
       obscureText: obscureText,
       onFieldSubmitted: onFiledSubmittedValue,
       keyboardType: keyBoardType,

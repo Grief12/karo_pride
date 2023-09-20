@@ -5,7 +5,7 @@ import 'package:b_social02/pages/Comment.dart';
 import 'package:b_social02/pages/PostProfile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
-import 'package:b_social02/components/like_button.dart';
+//import 'package:b_social02/components/like_button.dart';
 
 class FetchPost extends StatefulWidget {
   final int id;
@@ -70,7 +70,7 @@ class _FetchPostState extends State<FetchPost> {
   }
 
   loopment(panjang) {
-    for (int i = 0; i < panjang.length; i++) {
+    for (int i = 0; i < panjang.length;) {
       if (widget.id == widget.arrLikes[i]['post_id']) {
         if (currentUser.email == widget.arrLikes[i]['email']) {
           setState(() {

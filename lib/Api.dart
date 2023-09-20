@@ -63,7 +63,6 @@ class Api {
   }
 
   Future post(String user, String? msg, like, [var img = null]) async {
-
     if (img != null) {
       final res = await http.post(Uri.parse(urlPost), body: {
         "username": user,
@@ -79,13 +78,6 @@ class Api {
 
       return json.decode(result.body);
     }
-  }
-
-  Future profile(String email) async {
-    final result = await http.get(Uri.parse(urlProfil + '/${email}'));
-
-    print(urlUser + '/${email}');
-    return json.decode(result.body);
   }
 
   Future profile(String email) async {
@@ -142,5 +134,4 @@ class Api {
 
     return json.decode(result.body);
   }
-
 }
