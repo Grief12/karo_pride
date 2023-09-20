@@ -8,6 +8,7 @@ class Api {
   final String urlChat = 'http://127.0.0.1:8000/api/chat';
   final String urlProfil = 'http://127.0.0.1:8000/api/profil';
   final String urlKomen = 'http://127.0.0.1:8000/api/komen';
+
   Future getPost() async {
     final result = await http.get(Uri.parse(urlPost));
 
@@ -63,7 +64,6 @@ class Api {
   }
 
   Future post(String user, String? msg, like, [var img = null]) async {
-
     if (img != null) {
       final res = await http.post(Uri.parse(urlPost), body: {
         "username": user,
@@ -85,31 +85,6 @@ class Api {
     final result = await http.get(Uri.parse(urlProfil + '/${email}'));
 
     print(urlUser + '/${email}');
-    return json.decode(result.body);
-  }
-
-  Future profile(String email) async {
-    final result = await http.get(Uri.parse(urlProfil + '/${email}'));
-
-    print(urlUser + '/${email}');
-    return json.decode(result.body);
-  }
-
-  Future updateusernames(String username, String email) async {
-    final result = await http.put(Uri.parse(urlProfil + '/${email}'),
-        body: {"username": username.toString()});
-    return json.decode(result.body);
-  }
-
-  Future updatebio(String bio, String email) async {
-    final result = await http
-        .put(Uri.parse(urlProfil + '/${email}'), body: {"bio": bio.toString()});
-    return json.decode(result.body);
-  }
-
-  Future updatepp(String url, String email) async {
-    final result = await http.put(Uri.parse(urlProfil + '/${email}'),
-        body: {"profile": url.toString()});
     return json.decode(result.body);
   }
 
@@ -145,5 +120,4 @@ class Api {
     print("berhasil di post");
     return json.decode(result.body);
   }
-
 }
