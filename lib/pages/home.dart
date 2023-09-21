@@ -28,8 +28,8 @@ class _HomePageState extends State<HomePage> {
               return ListView.builder(
                   itemCount: snapshot.data['data']['post'].length,
                   itemBuilder: (context, index) {
-                    final post = snapshot.data['data']['post'][index];
                     final like = snapshot.data['data']['like'];
+                    final post = snapshot.data['data']['post'][index];
                     return FetchPost(
                         post['id'],
                         post['username'],
@@ -84,6 +84,7 @@ class _HomePageState extends State<HomePage> {
                     itemBuilder: (context, index) {
                       final post = snapshot.data['data']['post'][index];
                       final like = snapshot.data['data']['like'];
+
                       return FetchPost(
                           post['id'],
                           post['username'],

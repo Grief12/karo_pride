@@ -29,9 +29,15 @@ class _FetchPostState extends State<FetchPost> {
   //late final confirm = loopment();
   final currentUser = FirebaseAuth.instance.currentUser!;
   late final jsonData = Api().fetchLike(widget.id);
-  bool pressed = true;
+
   int arrLengthh = 0;
+  late bool likeConf = widget.arrLikes == currentUser.email! ? false : true;
   var arrData;
+  late List likearrConf = widget.arrLikes
+      .where((element) => element['post_id'] == widget.id)
+      .toList();
+  bool pressed = true;
+
   //late bool confirms = widget.confirm == 0 ? false : true;
 
   // void postLikeToFirebase() {
@@ -60,43 +66,44 @@ class _FetchPostState extends State<FetchPost> {
   }
 
   searchData() {
-    for (int i = 0; i < widget.arrLikes.length; i++) {
-      if (widget.id == widget.arrLikes[i]['post_id']) {
+    for (int i = 0; i < likearrConf.length; i++) {
+      if (currentUser.email == likearrConf[i]['email']) {
         print(widget.arrLikes.length);
-        return widget.arrLikes;
+        return likearrConf[i]['email'];
       }
     }
   }
 
-  loopment(panjang) {
-    for (int i = 0; i < widget.arrLikes.length; i++) {
-      if (widget.id == widget.arrLikes[i]['post_id']) {
-        if (currentUser.email == widget.arrLikes[i]['email']) {
-          setState(() {
-            pressed = false;
-          });
-          return false;
-        } else {
-          setState(() {
-            pressed = true;
-          });
-          return true;
-        }
-      } else {
-        setState(() {
-          pressed = true;
-        });
-        return true;
-      }
-    }
-  }
+  // loopment(panjang) {
+  //   for (int i = 0; i < widget.arrLikes.length; i++) {
+  //     if (widget.id == widget.arrLikes[i]['post_id']) {
+  //       if (currentUser.email == widget.arrLikes[i]['email']) {
+  //         setState(() {
+  //           pressed = false;
+  //         });
+  //       } else {
+  //         setState(() {
+  //           pressed = true;
+  //         });
+  //       }
+  //     } else {
+  //       setState(() {
+  //         pressed = true;
+  //       });
+  //     }
+  //   }
+  // }
 
   @override
   void initState() {
     super.initState();
+    print(likearrConf.contains(currentUser.email!));
+    print(likearrConf);
     arrData = searchData();
-    pressed = arrData.length == 0 ? true : loopment(arrData);
-    arrLengthh = arrData.length;
+    //   arrData = searchData();
+    //  pressed = widget.arrLikes.length == 0 ? true : loopment(arrData);
+    //   arrLengthh = arrData.length;
+    pressed = arrData == currentUser.email ? false : true;
   }
 
   @override
@@ -150,6 +157,9 @@ class _FetchPostState extends State<FetchPost> {
                         children: [
                           IconButton(
                               onPressed: () {
+                                print(likearrConf.length);
+                                print(likearrConf);
+                                print(pressed);
                                 setState(() {
                                   print(pressed);
                                   pressed = !pressed;
