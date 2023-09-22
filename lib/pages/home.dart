@@ -32,6 +32,7 @@ class _HomePageState extends State<HomePage> {
                     final post = snapshot.data['data']['post'][index];
                     return FetchPost(
                         post['id'],
+                        post['profile'],
                         post['username'],
                         post['message'],
                         post['imgurl'],
@@ -87,6 +88,7 @@ class _HomePageState extends State<HomePage> {
 
                       return FetchPost(
                           post['id'],
+                          post['profile'],
                           post['username'],
                           post['message'],
                           post['imgurl'],
