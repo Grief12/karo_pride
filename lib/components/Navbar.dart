@@ -1,3 +1,4 @@
+import 'package:b_social02/pages/CHAT/pages/chat.dart';
 import 'package:b_social02/pages/Post.dart';
 import 'package:b_social02/pages/home.dart';
 import 'package:b_social02/pages/profile.dart';
@@ -17,7 +18,7 @@ class _NavbarState extends State<Navbar> {
   List<Widget> _buildScren() {
     return [
       HomePage(),
-      Text('Search'),
+      Chat(),
       Create(),
       Profile(),
     ];
