@@ -3,12 +3,12 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 
 class Api {
-  final String urlPost = 'http://192.168.43.23:8000/api/post';
-  final String urlUser = 'http://192.168.43.23:8000/api/user';
-  final String urlChat = 'http://192.168.43.23:8000/api/chat';
-  final String urlProfil = 'http://192.168.43.23:8000/api/profil';
-  final String urlKomen = 'http://192.168.43.23:8000/api/komen';
-
+  final String urlPost = 'http://192.168.100.21:8000/api/post';
+  final String urlUser = 'http://192.168.100.21:8000/api/user';
+  final String urlChat = 'http://192.168.100.21:8000/api/chat';
+  final String urlProfil = 'http://192.168.100.21:8000/api/profil';
+  final String urlKomen = 'http://192.168.100.21:8000/api/komen';
+  
   Future getPost() async {
     final result = await http.get(Uri.parse(urlPost));
 
@@ -101,11 +101,16 @@ class Api {
     String username,
     String password,
   ) async {
+    print("waiting");
+    print(email);
+    print(username);
+    print(password);
     final result = await http.post(Uri.parse(urlUser), body: {
       "email": email,
       "username": username,
       "password": password,
     });
+    print("berhasil di pos");
     return json.decode(result.body);
   }
 
@@ -126,6 +131,31 @@ class Api {
     final result = await http.post(Uri.parse(urlKomen + '/${id}'),
         body: {"pesan": pesan, "email": email});
     print("berhasil di post");
+    return json.decode(result.body);
+  }
+  Future postChat(
+    String user,
+    String? msg,
+    int penerima,
+  ) async {
+    print("pesan tidak boleh kosong");
+    print(user);
+    print(msg);
+    print(penerima);
+    if (msg != null) {
+      final res = await http.post(Uri.parse(urlChat + '/${user}'), body: {
+        "email": user,
+        "pesan": msg,
+        "receiverid": penerima.toString(),
+      });
+
+      return json.decode(res.body);
+    }
+  }
+
+  Future getChat(email) async {
+    final result = await http.get(Uri.parse(urlChat + '/${email}'));
+
     return json.decode(result.body);
   }
 }

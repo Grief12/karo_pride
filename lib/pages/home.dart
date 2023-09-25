@@ -66,15 +66,6 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.grey[900],
         foregroundColor: Colors.white,
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.black,
-        foregroundColor: Colors.white,
-        child: Icon(Icons.send),
-        onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Create()));
-        },
-      ),
       body: FutureBuilder(
           future: api.getPost(),
           builder: (context, snapshot) {
