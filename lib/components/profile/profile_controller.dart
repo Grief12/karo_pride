@@ -44,12 +44,12 @@ class ProfileController with ChangeNotifier {
 
       await upFoto();
 
-      PersistentNavBarNavigator.pushNewScreen(
-        context,
-        screen: Profile(),
-        withNavBar: true,
-        pageTransitionAnimation: PageTransitionAnimation.cupertino,
-      );
+      // PersistentNavBarNavigator.pushNewScreen(
+      //   context,
+      //   screen: Profile(),
+      //   withNavBar: true,
+      //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
+      // );
 
       print(pickedFile!.name);
       // Navigator.push(context,

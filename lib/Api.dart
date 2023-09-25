@@ -78,6 +78,24 @@ class Api {
     return json.decode(result.body);
   }
 
+  Future updateusernames(String username, String email) async {
+    final result = await http.put(Uri.parse(urlProfil + '/${email}'),
+        body: {"username": username.toString()});
+    return json.decode(result.body);
+  }
+
+  Future updatebio(String bio, String email) async {
+    final result = await http
+        .put(Uri.parse(urlProfil + '/${email}'), body: {"bio": bio.toString()});
+    return json.decode(result.body);
+  }
+
+  Future updatepp(String url, String email) async {
+    final result = await http.put(Uri.parse(urlProfil + '/${email}'),
+        body: {"profile": url.toString()});
+    return json.decode(result.body);
+  }
+
   Future registerUser(
     String email,
     String username,
