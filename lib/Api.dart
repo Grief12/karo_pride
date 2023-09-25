@@ -8,26 +8,21 @@ class Api {
   final String urlChat = 'http://192.168.100.21:8000/api/chat';
   final String urlProfil = 'http://192.168.100.21:8000/api/profil';
   final String urlKomen = 'http://192.168.100.21:8000/api/komen';
+  
   Future getPost() async {
     final result = await http.get(Uri.parse(urlPost));
 
     return json.decode(result.body);
   }
 
-  Future like(int like, id, bool pressed) async {
+  Future like(id, bool pressed) async {
     print("id post ke ${id}");
-    if (pressed == true && like > 0) {
-      like = like - 1;
-    } else if (pressed != true && like == 0) {
-      like = like + 1;
-    } else if (pressed != true && like > 0) {
-      like = like + 1;
-    }
+    int confirm = pressed == false ? 0 : 1;
+    int like = 1;
 
     print("like post ke ${like}");
-    final result = await http.post(Uri.parse(urlPost + '/like/${id}'), body: {
-      "likes": like.toString(),
-    });
+    final result = await http.post(Uri.parse(urlPost + '/like/${id}'),
+        body: {"likes": like.toString(), "pressed": confirm.toString()});
 
     print(json.decode(result.body));
     return json.decode(result.body);
@@ -39,9 +34,8 @@ class Api {
   }
 
   Future postLikeConfirm(id, bool pressed, email) async {
-    if (pressed == true) {
-      int confirm = 1;
-
+    int confirm = pressed == false ? 0 : 1;
+    if (confirm == 0) {
       final result =
           await http.post(Uri.parse(urlPost + '/like/${id}/${email}'), body: {
         "confirm": confirm.toString(),
@@ -49,12 +43,9 @@ class Api {
       print("data berhasil dipost");
       return json.decode(result.body);
     }
-
-    if (pressed == false) {
-      int confirm = 0;
-
+    if (confirm == 1) {
       final result =
-          await http.post(Uri.parse(urlPost + '/like/${id}/${email}'), body: {
+          await http.delete(Uri.parse(urlPost + '/like/${id}/${email}'), body: {
         "confirm": confirm.toString(),
       });
       print("data berhasil dipost");
@@ -135,11 +126,13 @@ class Api {
   }
 
   Future postKomen(String pesan, int id, String email) async {
-    final result = await http.get(Uri.parse(urlKomen + '/${id}'));
-
+    print("berhasil");
+    print(id);
+    final result = await http.post(Uri.parse(urlKomen + '/${id}'),
+        body: {"pesan": pesan, "email": email});
+    print("berhasil di post");
     return json.decode(result.body);
   }
-
   Future postChat(
     String user,
     String? msg,

@@ -1,22 +1,20 @@
 import 'package:b_social02/Api.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:b_social02/pages/Comment.dart';
 import 'package:b_social02/pages/PostProfile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
-import 'package:b_social02/components/like_button.dart';
 
 class FetchPost extends StatefulWidget {
   final int id;
+  final profile;
   final String username;
   final String msg;
   final String img;
   final int like;
   final String email;
   final List arrLikes;
-  const FetchPost(this.id, this.username, this.msg, this.img, this.like,
-      this.email, this.arrLikes);
+  const FetchPost(this.id, this.profile, this.username, this.msg, this.img,
+      this.like, this.email, this.arrLikes);
 
   @override
   State<FetchPost> createState() => _FetchPostState();
@@ -25,69 +23,17 @@ class FetchPost extends StatefulWidget {
 class _FetchPostState extends State<FetchPost> {
   late int likes = widget.like;
   late int posId = widget.id;
-  String tes = "maklor@gmail.com";
-  //late final confirm = loopment();
   final currentUser = FirebaseAuth.instance.currentUser!;
-  late final jsonData = Api().fetchLike(widget.id);
-  TextEditingController commentCotroller = TextEditingController();
-  bool pressed = true;
-  int arrLengthh = 0;
   var arrData;
-  //late bool confirms = widget.confirm == 0 ? false : true;
-
-  // void postLikeToFirebase() {
-  //   DocumentReference postRef = FirebaseFirestore.instance
-  //       .collection('Likes')
-  //       .doc(widget.id.toString());
-
-  //   if (pressed) {
-  //     postRef.update({
-  //       'Likes': FieldValue.arrayUnion([currentUser.email])
-  //     });
-  //   } else {
-  //     postRef.update({
-  //       'Likes': FieldValue.arrayRemove([currentUser.email])
-  //     });
-  //   }
-  // }
-
-  void postMassage() async {
-    var doc = FirebaseFirestore.instance
-        .collection("Likes")
-        .doc(widget.id.toString());
-    doc.set({
-      'Likes': [currentUser.email],
-    });
-  }
+  late List likearrConf = widget.arrLikes
+      .where((element) => element['post_id'] == widget.id)
+      .toList();
+  bool pressed = true;
 
   searchData() {
-    for (int i = 0; i < widget.arrLikes.length; i++) {
-      if (widget.id == widget.arrLikes[i]['post_id']) {
-        print(widget.arrLikes.length);
-        return widget.arrLikes;
-      }
-    }
-  }
-
-  loopment(panjang) {
-    for (int i = 0; i < panjang.length; i++) {
-      if (widget.id == widget.arrLikes[i]['post_id']) {
-        if (currentUser.email == widget.arrLikes[i]['email']) {
-          setState(() {
-            pressed = false;
-          });
-          return false;
-        } else {
-          setState(() {
-            pressed = true;
-          });
-          return true;
-        }
-      } else {
-        setState(() {
-          pressed = true;
-        });
-        return true;
+    for (int i = 0; i < likearrConf.length; i++) {
+      if (currentUser.email == likearrConf[i]['email']) {
+        return likearrConf[i]['email'];
       }
     }
   }
@@ -96,8 +42,7 @@ class _FetchPostState extends State<FetchPost> {
   void initState() {
     super.initState();
     arrData = searchData();
-    pressed = arrData.length == 0 ? true : loopment(arrData);
-    arrLengthh = arrData.length;
+    pressed = arrData == currentUser.email ? false : true;
   }
 
   @override
@@ -113,10 +58,23 @@ class _FetchPostState extends State<FetchPost> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    height: 13,
+                  Container(
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.grey)),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: widget.profile == null
+                          ? Icon(
+                              Icons.person,
+                              size: 25,
+                            )
+                          : Image.network(
+                              widget.profile,
+                              fit: BoxFit.cover,
+                            ),
+                    ),
                   ),
-                  Icon(Icons.people),
                   Padding(padding: EdgeInsets.all(10)),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,12 +93,26 @@ class _FetchPostState extends State<FetchPost> {
                         height: 10,
                       ),
                       Center(
-                        child: Container(
-                          width: 300,
-                          height: 200,
-                          child: AspectRatio(
-                            aspectRatio: 1 / 1,
-                            child: Image.network(widget.img, fit: BoxFit.cover),
+                        child: GestureDetector(
+                          onTap: () => showDialog(
+                              context: context,
+                              builder: (context) => Padding(
+                                    padding: EdgeInsets.all(20),
+                                    child: Container(
+                                      child: Image.network(
+                                        widget.img,
+                                        fit: BoxFit.fill,
+                                      ),
+                                    ),
+                                  )),
+                          child: Container(
+                            width: 300,
+                            height: 200,
+                            child: AspectRatio(
+                              aspectRatio: 1 / 1,
+                              child:
+                                  Image.network(widget.img, fit: BoxFit.cover),
+                            ),
                           ),
                         ),
                       ),
@@ -155,37 +127,35 @@ class _FetchPostState extends State<FetchPost> {
                                   print(pressed);
                                   pressed = !pressed;
                                   print(pressed);
-                                  if (pressed == true && arrLengthh > 0) {
-                                    arrLengthh = arrLengthh - 1;
-                                  } else if (pressed != true &&
-                                      arrLengthh == 0) {
-                                    postMassage();
-                                    arrLengthh = arrLengthh + 1;
-                                  } else if (pressed != true &&
-                                      arrLengthh > 0) {
-                                    arrLengthh = arrLengthh + 1;
+                                  if (pressed == true && likes > 0) {
+                                    likes = likes - 1;
+                                  } else if (pressed != true && likes == 0) {
+                                    // postMassage();
+                                    likes = likes + 1;
+                                  } else if (pressed != true && likes > 0) {
+                                    likes = likes + 1;
                                   }
-                                  arrLengthh = arrLengthh;
+                                  likes = likes;
                                 });
-                                //Api().postLikeConfirm(widget.id,
-                                //    pressed, currentUser.email!);
-                                Api().like(widget.like, widget.id, pressed);
+                                Api().postLikeConfirm(
+                                    widget.id, pressed, currentUser.email!);
+                                Api().like(widget.id, pressed);
                                 //postLikeToFirebase();
                               },
                               icon: pressed == true
                                   ? Icon(Icons.thumb_up_outlined)
                                   : Icon(Icons.thumb_up)),
-                          Text(arrLengthh.toString()),
+                          Text(likes.toString()),
                           SizedBox(
                             width: 10,
                           ),
                           IconButton(
                               onPressed: () {
-                                PersistentNavBarNavigator.pushNewScreen(
-                                  context,
-                                  screen: Comment(widget.id),
-                                  withNavBar: true,
-                                );
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            Comment(widget.id)));
                               },
                               icon: Icon(Icons.comment_outlined))
                         ],
@@ -194,13 +164,6 @@ class _FetchPostState extends State<FetchPost> {
                       SizedBox(
                         height: 20,
                       ),
-                      // Expanded(
-                      //     child: TextFormField(
-                      //   controller: commentCotroller,
-                      //   minLines: 1,
-                      //   maxLines: 90,
-                      //   decoration: InputDecoration(hintText: "Keren"),
-                      // ))
                     ],
                   ),
                 ],

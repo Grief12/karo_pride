@@ -13,6 +13,7 @@ class Comment extends StatefulWidget {
 class _CommentState extends State<Comment> {
   Api api = Api();
   final currentUser = FirebaseAuth.instance.currentUser!;
+  TextEditingController commentCotroller = TextEditingController();
 
   Future<void> refresh() {
     return api.fetchKomen(widget.postId);
@@ -26,6 +27,42 @@ class _CommentState extends State<Comment> {
           backgroundColor: Colors.grey[900],
           foregroundColor: Colors.white,
         ),
+        floatingActionButton: FloatingActionButton(
+            backgroundColor: Colors.black,
+            foregroundColor: Colors.white,
+            onPressed: () {
+              showModalBottomSheet(
+                  backgroundColor: Colors.white,
+                  barrierColor: Color(0x2e000000),
+                  context: context,
+                  builder: (context) => Container(
+                      height: 200,
+                      child: Row(
+                        children: [
+                          Expanded(
+                              child: TextField(
+                            minLines: 1,
+                            maxLines: 9,
+                            controller: commentCotroller,
+                            decoration: InputDecoration(
+                              contentPadding: new EdgeInsets.symmetric(
+                                  vertical: 20, horizontal: 10),
+                              hintText: 'Enter text',
+                            ),
+                          )),
+                          IconButton(
+                              onPressed: () async {
+                                await Api().postKomen(commentCotroller.text,
+                                    widget.postId, currentUser.email!);
+                                commentCotroller.clear();
+                                setState(() {});
+                                Navigator.pop(context);
+                              },
+                              icon: Icon(Icons.send))
+                        ],
+                      )));
+            },
+            child: Center(child: Icon(Icons.comment))),
         body: Column(
           children: [
             FutureBuilder(
@@ -35,6 +72,8 @@ class _CommentState extends State<Comment> {
                     return RefreshIndicator(
                         child: ListView.builder(
                           itemCount: snapshot.data['data'].length,
+                          shrinkWrap: true,
+                          scrollDirection: Axis.vertical,
                           itemBuilder: (context, index) {
                             final komen = snapshot.data['data'][index];
                             return Container(
@@ -74,22 +113,6 @@ class _CommentState extends State<Comment> {
                   }
                   return Container();
                 }),
-            Row(children: [
-              Align(
-                alignment: FractionalOffset.bottomCenter,
-                child: Container(
-                    child: Row(
-                  children: [
-                    TextFormField(
-                      minLines: 1,
-                      maxLines: 15,
-                      decoration: InputDecoration(hintText: "keren"),
-                    ),
-                    IconButton(onPressed: () {}, icon: Icon(Icons.send))
-                  ],
-                )),
-              )
-            ])
           ],
         ));
   }
