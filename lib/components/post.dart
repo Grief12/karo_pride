@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:b_social02/pages/Comment.dart';
 import 'package:b_social02/pages/PostProfile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'dart:io';
+import 'package:dio/dio.dart';
 
 class FetchPost extends StatefulWidget {
   final int id;
@@ -38,6 +42,33 @@ class _FetchPostState extends State<FetchPost> {
     }
   }
 
+  Future download(String urlImg) async {
+    print("method start");
+    var extDir = await getExternalStorageDirectory();
+    print("method di eksekusi");
+    var dio = Dio();
+    var result = await dio.get<List<int>>(urlImg,
+        options: Options(responseType: ResponseType.bytes));
+    if (result.statusCode == 200) {
+      var byteDownloaded = result.data;
+      if (byteDownloaded != null) {
+        var file = File("${extDir!.path}/b_social02.jpg");
+        file.writeAsBytesSync(byteDownloaded);
+        return "file berhasil di save ke ${file.path}";
+      } else {
+        print("file kosong");
+        return "error file kosong";
+      }
+    } else {
+      return "download error";
+    }
+    if (extDir != null) {
+    } else {
+      print("direktori kosong");
+      return "error";
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -58,6 +89,9 @@ class _FetchPostState extends State<FetchPost> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  SizedBox(
+                    height: 15,
+                  ),
                   Container(
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
@@ -98,10 +132,59 @@ class _FetchPostState extends State<FetchPost> {
                               context: context,
                               builder: (context) => Padding(
                                     padding: EdgeInsets.all(20),
-                                    child: Container(
-                                      child: Image.network(
-                                        widget.img,
-                                        fit: BoxFit.fill,
+                                    child: GestureDetector(
+                                      onTap: () => Navigator.pop(context),
+                                      onLongPress: () => showDialog(
+                                          context: context,
+                                          builder: (context) => Center(
+                                                child: GestureDetector(
+                                                    onTap: () async {
+                                                      print("Download");
+                                                      await launchUrl(
+                                                          Uri.parse(widget.img),
+                                                          mode: LaunchMode
+                                                              .externalApplication);
+                                                      //download(widget.img);
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: Container(
+                                                      color: Colors.white,
+                                                      width: 225,
+                                                      height: 75,
+                                                      child: Padding(
+                                                        padding:
+                                                            EdgeInsets.all(8),
+                                                        child: Row(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              Icon(Icons
+                                                                  .download),
+                                                              SizedBox(
+                                                                width: 20,
+                                                              ),
+                                                              Center(
+                                                                child: Text(
+                                                                  "Download",
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        18,
+                                                                  ),
+                                                                ),
+                                                              )
+                                                            ]),
+                                                      ),
+                                                    )),
+                                              )),
+                                      child: AspectRatio(
+                                        aspectRatio: 1 / 1,
+                                        child: Container(
+                                          child: Image.network(
+                                            widget.img,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   )),
