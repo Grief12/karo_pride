@@ -109,6 +109,7 @@ class Api {
       "email": email,
       "username": username,
       "password": password,
+      "bio": "",
     });
     print("berhasil di pos");
     return json.decode(result.body);
