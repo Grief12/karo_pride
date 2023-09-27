@@ -66,9 +66,6 @@ class _LoginPageState extends State<LoginPage> {
                   width: 200,
                   height: 200,
                 ),
-                SizedBox(
-                  height: 30,
-                ),
                 //tf email
                 MyTextField(
                   controller: emailTextController,

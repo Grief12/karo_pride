@@ -35,7 +35,7 @@ class ProfileController with ChangeNotifier {
     notifyListeners();
   }
 
-  void pickGalleryImage() async {
+  void pickGalleryImage(context) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom, allowedExtensions: ['jpg', 'jpeg', 'png']);
 
@@ -44,12 +44,12 @@ class ProfileController with ChangeNotifier {
 
       await upFoto();
 
-      // PersistentNavBarNavigator.pushNewScreen(
-      //   context,
-      //   screen: Profile(),
-      //   withNavBar: true,
-      //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
-      // );
+       PersistentNavBarNavigator.pushNewScreen(
+         context,
+         screen: Profile(),
+         withNavBar: true,
+         pageTransitionAnimation: PageTransitionAnimation.cupertino,
+       );
 
       print(pickedFile!.name);
       // Navigator.push(context,
@@ -113,7 +113,7 @@ class ProfileController with ChangeNotifier {
                 ),
                 ListTile(
                   onTap: () {
-                    pickGalleryImage();
+                    pickGalleryImage(context);
                     Navigator.pop(context);
                   },
                   leading: Icon(
