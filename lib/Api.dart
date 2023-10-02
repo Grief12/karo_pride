@@ -1,14 +1,18 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:async';
+import 'package:b_social02/auth/Token.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Api {
-  final String urlPost = 'http://192.168.100.21:8000/api/post';
-  final String urlUser = 'http://192.168.100.21:8000/api/user';
-  final String urlChat = 'http://192.168.100.21:8000/api/chat';
-  final String urlProfil = 'http://192.168.100.21:8000/api/profil';
-  final String urlKomen = 'http://192.168.100.21:8000/api/komen';
-  
+  final String urlPost = 'http://127.0.0.1:8000/api/post';
+  final String urlUser = 'http://127.0.0.1:8000/api/user';
+  final String urlChat = 'http://127.0.0.1:8000/api/chat';
+  final String urlProfil = 'http://127.0.0.1:8000/api/profil';
+  final String urlKomen = 'http://127.0.0.1:8000/api/komen';
+  final currentUser = FirebaseAuth.instance.currentUser!;
+  Token token = Token();
+
   Future getPost() async {
     final result = await http.get(Uri.parse(urlPost));
 
@@ -21,8 +25,11 @@ class Api {
     int like = 1;
 
     print("like post ke ${like}");
-    final result = await http.post(Uri.parse(urlPost + '/like/${id}'),
-        body: {"likes": like.toString(), "pressed": confirm.toString()});
+    final result = await http.post(Uri.parse(urlPost + '/like/${id}'), body: {
+      "likes": like.toString(),
+      "pressed": confirm.toString(),
+      "token": token.getToken(currentUser.email!)
+    });
 
     print(json.decode(result.body));
     return json.decode(result.body);
@@ -36,21 +43,33 @@ class Api {
   Future postLikeConfirm(id, bool pressed, email) async {
     int confirm = pressed == false ? 0 : 1;
     if (confirm == 0) {
-      final result =
-          await http.post(Uri.parse(urlPost + '/like/${id}/${email}'), body: {
+      final result = await http
+          .post(Uri.parse(urlPost + '/like/${id}/${email}'), body: {
         "confirm": confirm.toString(),
+        "token": token.getToken(currentUser.email!)
       });
       print("data berhasil dipost");
       return json.decode(result.body);
     }
     if (confirm == 1) {
-      final result =
-          await http.delete(Uri.parse(urlPost + '/like/${id}/${email}'), body: {
+      final result = await http
+          .delete(Uri.parse(urlPost + '/like/${id}/${email}'), body: {
         "confirm": confirm.toString(),
+        "token": token.getToken(currentUser.email!)
       });
       print("data berhasil dipost");
       return json.decode(result.body);
     }
+  }
+
+  Future deletePost(int id) async {
+    print("delte");
+    final res = await http.delete(Uri.parse(urlPost), body: {
+      "id": id.toString(),
+      "token": token.getToken(currentUser.email!)
+    });
+    print(json.decode(res.body));
+    return json.decode(res.body);
   }
 
   Future post(String user, String? msg, like, [var img = null]) async {
@@ -59,13 +78,18 @@ class Api {
         "username": user,
         "message": msg,
         "likes": like.toString(),
-        "imgurl": img
+        "imgurl": img,
+        "token": token.getToken(currentUser.email!)
       });
 
       return json.decode(res.body);
     } else {
-      final result = await http.post(Uri.parse(urlPost),
-          body: {"username": user, "message": msg, "likes": like.toString()});
+      final result = await http.post(Uri.parse(urlPost), body: {
+        "username": user,
+        "message": msg,
+        "likes": like.toString(),
+        "token": token.getToken(currentUser.email!)
+      });
 
       return json.decode(result.body);
     }
@@ -110,6 +134,7 @@ class Api {
       "username": username,
       "password": password,
       "bio": "",
+      "token": token.getToken(currentUser.email!)
     });
     print("berhasil di pos");
     return json.decode(result.body);
@@ -129,8 +154,11 @@ class Api {
   Future postKomen(String pesan, int id, String email) async {
     print("berhasil");
     print(id);
-    final result = await http.post(Uri.parse(urlKomen + '/${id}'),
-        body: {"pesan": pesan, "email": email});
+    final result = await http.post(Uri.parse(urlKomen + '/${id}'), body: {
+      "pesan": pesan,
+      "email": email,
+      "token": token.getToken(currentUser.email!)
+    });
     print("berhasil di post");
     return json.decode(result.body);
   }
