@@ -4,7 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class Comment extends StatefulWidget {
   final int postId;
-  const Comment(this.postId);
+  final profile;
+  const Comment(this.postId, this.profile);
 
   @override
   State<Comment> createState() => _CommentState();
@@ -85,7 +86,25 @@ class _CommentState extends State<Comment> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Icon(Icons.people),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            border:
+                                                Border.all(color: Colors.grey)),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(100),
+                                          child: widget.profile == null
+                                              ? Icon(
+                                                  Icons.person,
+                                                  size: 25,
+                                                )
+                                              : Image.network(
+                                                  widget.profile,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                        ),
+                                      ),
                                       Padding(padding: EdgeInsets.all(10)),
                                       Column(
                                         mainAxisAlignment:

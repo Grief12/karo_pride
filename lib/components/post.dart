@@ -1,4 +1,5 @@
 import 'package:b_social02/Api.dart';
+import 'package:b_social02/components/Navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:b_social02/pages/Comment.dart';
 import 'package:b_social02/pages/PostProfile.dart';
@@ -28,6 +29,7 @@ class _FetchPostState extends State<FetchPost> {
   late int likes = widget.like;
   late int posId = widget.id;
   final currentUser = FirebaseAuth.instance.currentUser!;
+  String? user;
   var arrData;
   late List likearrConf = widget.arrLikes
       .where((element) => element['post_id'] == widget.id)
@@ -74,6 +76,7 @@ class _FetchPostState extends State<FetchPost> {
     super.initState();
     arrData = searchData();
     pressed = arrData == currentUser.email ? false : true;
+    user = currentUser.email;
   }
 
   @override
@@ -237,10 +240,52 @@ class _FetchPostState extends State<FetchPost> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            Comment(widget.id)));
+                                        builder: (context) => Comment(
+                                            widget.id, widget.profile)));
                               },
-                              icon: Icon(Icons.comment_outlined))
+                              icon: Icon(Icons.comment_outlined)),
+                          user == currentUser.email
+                              ? IconButton(
+                                  onPressed: () async {
+                                    await Api()
+                                        .deletePost(widget.id)
+                                        .whenComplete(() {
+                                      setState(() {});
+                                      showDialog(
+                                          barrierDismissible: false,
+                                          context: context,
+                                          builder: (context) => Center(
+                                                child: GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.pushReplacement(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder:
+                                                                  (context) =>
+                                                                      Navbar()));
+                                                    },
+                                                    child: Container(
+                                                      color: Colors.white,
+                                                      width: 225,
+                                                      height: 75,
+                                                      child: Padding(
+                                                        padding:
+                                                            EdgeInsets.all(8),
+                                                        child: Center(
+                                                          child: Text(
+                                                              "Post dihapus",
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                      16)),
+                                                        ),
+                                                      ),
+                                                    )),
+                                              ));
+                                      setState(() {});
+                                    });
+                                  },
+                                  icon: Icon(Icons.delete_outlined))
+                              : Container()
                         ],
                       ),
                       Text(widget.msg),
