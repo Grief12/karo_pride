@@ -1,3 +1,4 @@
+import 'package:b_social02/pages/CHAT/pages/chat.dart';
 import 'package:b_social02/pages/Post.dart';
 import 'package:b_social02/pages/home.dart';
 import 'package:b_social02/pages/profile.dart';
@@ -12,13 +13,12 @@ class Navbar extends StatefulWidget {
 }
 
 class _NavbarState extends State<Navbar> {
-  final controller = PersistentTabController(initialIndex: 0);
+  final controller = PersistentTabController(initialIndex: 1);
 
   List<Widget> _buildScren() {
     return [
+      Chat(),
       HomePage(),
-      Text('Search'),
-      Create(),
       Profile(),
     ];
   }
@@ -26,18 +26,13 @@ class _NavbarState extends State<Navbar> {
   List<PersistentBottomNavBarItem> _navBarItem() {
     return [
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.home, color: Colors.black),
-        inactiveIcon: Icon(Icons.home_outlined, color: Colors.black),
-        activeColorPrimary: const Color.fromARGB(255, 192, 191, 191),
-      ),
-      PersistentBottomNavBarItem(
         icon: Icon(Icons.message, color: Colors.black),
         inactiveIcon: Icon(Icons.message_outlined, color: Colors.black),
         activeColorPrimary: const Color.fromARGB(255, 192, 191, 191),
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.add_circle, color: Colors.black),
-        inactiveIcon: Icon(Icons.add_circle_outline, color: Colors.black),
+        icon: Icon(Icons.home, color: Colors.black),
+        inactiveIcon: Icon(Icons.home_outlined, color: Colors.black),
         activeColorPrimary: const Color.fromARGB(255, 192, 191, 191),
       ),
       PersistentBottomNavBarItem(
@@ -55,11 +50,12 @@ class _NavbarState extends State<Navbar> {
       screens: _buildScren(),
       items: _navBarItem(),
       controller: controller,
-      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: Color.fromARGB(10, 161, 159, 159),
       decoration: NavBarDecoration(
-        colorBehindNavBar: Colors.red,
         borderRadius: BorderRadius.circular(1),
+        colorBehindNavBar: Color.fromARGB(255, 221, 220, 220).withOpacity(0.7),
       ),
+      navBarStyle: NavBarStyle.style15,
     );
   }
 }

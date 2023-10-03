@@ -150,7 +150,8 @@ class ProfileController with ChangeNotifier {
   }
 
 //edit name/
-  Future<void> showUserNameDialogAlert(BuildContext context, String name) {
+  Future<void> showUserNameDialogAlert(
+      BuildContext context, String name, void callback) {
     nameController.text = name;
     return showDialog(
         context: context,
@@ -200,7 +201,9 @@ class ProfileController with ChangeNotifier {
                       .updateusernames(nameController.text, currentUser.email!)
                       .then((value) {
                     nameController.clear();
+                    callback;
                   });
+
                   Navigator.pop(context);
                 },
                 child: Text(
@@ -217,7 +220,8 @@ class ProfileController with ChangeNotifier {
   }
 
 //edit bio
-  Future<void> showbioDialogAlert(BuildContext context, String bio) {
+  Future<void> showbioDialogAlert(
+      BuildContext context, String bio, void callback) {
     bioController.text = bio;
     return showDialog(
         context: context,
@@ -253,11 +257,13 @@ class ProfileController with ChangeNotifier {
               ),
               TextButton(
                 onPressed: () {
+                  callback;
                   api
                       .updatebio(bioController.text, currentUser.email!)
                       .then((value) {
                     bioController.clear();
                   });
+
                   Navigator.pop(context);
                 },
                 child: Text(

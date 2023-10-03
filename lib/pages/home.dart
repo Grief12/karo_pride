@@ -1,5 +1,4 @@
 import 'package:b_social02/components/post.dart';
-import 'package:b_social02/pages/Post.dart';
 import 'package:flutter/material.dart';
 import 'package:b_social02/Api.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -28,10 +27,11 @@ class _HomePageState extends State<HomePage> {
               return ListView.builder(
                   itemCount: snapshot.data['data']['post'].length,
                   itemBuilder: (context, index) {
-                    final post = snapshot.data['data']['post'][index];
                     final like = snapshot.data['data']['like'];
+                    final post = snapshot.data['data']['post'][index];
                     return FetchPost(
                         post['id'],
+                        post['profile'],
                         post['username'],
                         post['message'],
                         post['imgurl'],
@@ -63,15 +63,7 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.grey[300],
       appBar: AppBar(
         backgroundColor: Colors.grey[900],
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        child: Icon(Icons.send),
-        onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Create()));
-        },
       ),
       body: FutureBuilder(
           future: api.getPost(),
@@ -83,8 +75,10 @@ class _HomePageState extends State<HomePage> {
                     itemBuilder: (context, index) {
                       final post = snapshot.data['data']['post'][index];
                       final like = snapshot.data['data']['like'];
+
                       return FetchPost(
                           post['id'],
+                          post['profile'],
                           post['username'],
                           post['message'],
                           post['imgurl'],

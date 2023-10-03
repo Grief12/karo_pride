@@ -23,7 +23,7 @@ class MyTextField extends StatelessWidget {
         focusedBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: Colors.black),
         ),
-        fillColor: Colors.grey.shade200,
+        fillColor: Colors.white,
         filled: true,
         hintText: hintText,
         hintStyle: TextStyle(

@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:b_social02/components/profile/profile_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,7 @@ class _ProfileState extends State<Profile> {
     FirebaseAuth.instance.signOut();
   }
 
-  Future<void> refresh() async {
+  void callback() {
     setState(() {});
   }
 
@@ -52,115 +53,119 @@ class _ProfileState extends State<Profile> {
                         print(value);
                       });
                       Map<dynamic, dynamic> map = snapshot.data['data'];
-                      return RefreshIndicator(
-                        onRefresh: refresh,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Stack(
-                              alignment: Alignment.bottomCenter,
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 10),
-                                  child: Center(
-                                    child: Container(
-                                      height: 130,
-                                      width: 130,
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          border: Border.all(
-                                            color: Colors.grey,
-                                          )),
-                                      child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(100),
-                                          child: provider.image == null
-                                              ? map['profile'] == null
-                                                  ? Icon(
-                                                      Icons.person,
-                                                      size: 40,
-                                                    )
-                                                  : Image(
-                                                      fit: BoxFit.cover,
-                                                      image: NetworkImage(
-                                                          map['profile']),
-                                                      loadingBuilder: (context,
-                                                          child,
-                                                          loadingProgress) {
-                                                        if (loadingProgress ==
-                                                            null) return child;
-                                                        return Center(
-                                                            child:
-                                                                CircularProgressIndicator());
-                                                      },
-                                                      errorBuilder: (context,
-                                                          object, stack) {
-                                                        return Container(
-                                                          child: Icon(
-                                                            Icons.error_outline,
-                                                            color: Colors.black,
-                                                          ),
-                                                        );
-                                                      },
-                                                    )
-                                              : Stack(
-                                                  children: [
-                                                    Image.file(File(provider
-                                                            .image!.path)
-                                                        .absolute),
-                                                    Center(
-                                                        child:
-                                                            CircularProgressIndicator())
-                                                  ],
-                                                )),
-                                    ),
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Stack(
+                            alignment: Alignment.bottomCenter,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                child: Center(
+                                  child: Container(
+                                    height: 130,
+                                    width: 130,
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: Colors.grey,
+                                        )),
+                                    child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                        child: provider.image == null
+                                            ? map['profile'] == null
+                                                ? Icon(
+                                                    Icons.person,
+                                                    size: 40,
+                                                  )
+                                                : Image(
+                                                    fit: BoxFit.cover,
+                                                    image: NetworkImage(
+                                                        map['profile']),
+                                                    loadingBuilder: (context,
+                                                        child,
+                                                        loadingProgress) {
+                                                      if (loadingProgress ==
+                                                          null) return child;
+                                                      return Center(
+                                                          child:
+                                                              CircularProgressIndicator());
+                                                    },
+                                                    errorBuilder: (context,
+                                                        object, stack) {
+                                                      return Container(
+                                                        child: Icon(
+                                                          Icons.error_outline,
+                                                          color: Colors.black,
+                                                        ),
+                                                      );
+                                                    },
+                                                  )
+                                            : Stack(
+                                                children: [
+                                                  Image.file(
+                                                      File(provider.image!.path)
+                                                          .absolute),
+                                                  Center(
+                                                      child:
+                                                          CircularProgressIndicator())
+                                                ],
+                                              )),
                                   ),
                                 ),
-                                InkWell(
-                                  onTap: () {
-                                    provider.pickImage(context);
-                                  },
-                                  child: CircleAvatar(
-                                    radius: 14,
-                                    backgroundColor: Colors.black,
-                                    child: Icon(Icons.add,
-                                        size: 18, color: Colors.white),
-                                  ),
-                                )
-                              ],
-                            ),
-                            SizedBox(
-                              height: 40,
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                provider.showUserNameDialogAlert(
-                                    context, map['username']);
-                              },
-                              child: dannrow(
-                                title: 'Username',
-                                value: map['username'],
-                                iconData: Icons.person_outline,
                               ),
+                              InkWell(
+                                onTap: () {
+                                  provider.pickImage(context);
+                                },
+                                child: CircleAvatar(
+                                  radius: 14,
+                                  backgroundColor: Colors.black,
+                                  child: Icon(Icons.add,
+                                      size: 18, color: Colors.white),
+                                ),
+                              )
+                            ],
+                          ),
+                          SizedBox(
+                            height: 40,
+                          ),
+                          GestureDetector(
+                            child: dannrow(
+                              title: 'Email',
+                              value: map['email'],
+                              iconData: Icons.email_outlined,
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                provider.showbioDialogAlert(
-                                    context, map['bio']);
-                              },
-                              child: dannrow(
-                                title: 'Bio',
-                                value: map['bio'],
-                                iconData: Icons.person_outlined,
-                              ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              provider.showUserNameDialogAlert(
+                                  context, map['username'], callback());
+                            },
+                            child: dannrow(
+                              title: 'Username',
+                              value: map['username'],
+                              iconData: Icons.person_outline,
                             ),
-                          ],
-                        ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              provider.showbioDialogAlert(
+                                  context, map['bio'], callback());
+                            },
+                            child: dannrow(
+                              title: 'Bio',
+                              value: map['bio'],
+                              iconData: Icons.person_outlined,
+                            ),
+                          ),
+                        ],
                       );
                     } else {
                       return Center(
