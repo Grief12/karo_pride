@@ -1,13 +1,11 @@
 import 'package:b_social02/Api.dart';
 import 'package:b_social02/components/Navbar.dart';
+import 'package:b_social02/pages/Like.dart';
 import 'package:flutter/material.dart';
 import 'package:b_social02/pages/Comment.dart';
 import 'package:b_social02/pages/PostProfile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'dart:io';
-import 'package:dio/dio.dart';
 
 class FetchPost extends StatefulWidget {
   final int id;
@@ -44,39 +42,13 @@ class _FetchPostState extends State<FetchPost> {
     }
   }
 
-  Future download(String urlImg) async {
-    print("method start");
-    var extDir = await getExternalStorageDirectory();
-    print("method di eksekusi");
-    var dio = Dio();
-    var result = await dio.get<List<int>>(urlImg,
-        options: Options(responseType: ResponseType.bytes));
-    if (result.statusCode == 200) {
-      var byteDownloaded = result.data;
-      if (byteDownloaded != null) {
-        var file = File("${extDir!.path}/b_social02.jpg");
-        file.writeAsBytesSync(byteDownloaded);
-        return "file berhasil di save ke ${file.path}";
-      } else {
-        print("file kosong");
-        return "error file kosong";
-      }
-    } else {
-      return "download error";
-    }
-    if (extDir != null) {
-    } else {
-      print("direktori kosong");
-      return "error";
-    }
-  }
-
   @override
   void initState() {
     super.initState();
     arrData = searchData();
     pressed = arrData == currentUser.email ? false : true;
     user = currentUser.email;
+    likes = likearrConf.length;
   }
 
   @override
@@ -225,13 +197,23 @@ class _FetchPostState extends State<FetchPost> {
                                 });
                                 Api().postLikeConfirm(
                                     widget.id, pressed, currentUser.email!);
-                                Api().like(widget.id, pressed);
+                                //Api().like(widget.id, pressed);
                                 //postLikeToFirebase();
                               },
                               icon: pressed == true
                                   ? Icon(Icons.thumb_up_outlined)
                                   : Icon(Icons.thumb_up)),
-                          Text(likes.toString()),
+                          SizedBox(
+                            width: 7,
+                          ),
+                          GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Like(widget.id)));
+                              },
+                              child: Text(likes.toString())),
                           SizedBox(
                             width: 10,
                           ),
