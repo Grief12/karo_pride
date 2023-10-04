@@ -178,13 +178,7 @@ class _CreateState extends State<Create> {
                             }
 
                             pickedFile = null;
-                            PersistentNavBarNavigator.pushNewScreen(
-                              context,
-                              screen: Navbar(),
-                              withNavBar: false,
-                              pageTransitionAnimation:
-                                  PageTransitionAnimation.cupertino,
-                            );
+                            Navigator.pop(context);
                           }
 
                           //Navigator.pop(context);
