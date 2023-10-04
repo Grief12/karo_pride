@@ -146,7 +146,7 @@ class _ProfileState extends State<Profile> {
                           GestureDetector(
                             onTap: () {
                               provider.showUserNameDialogAlert(
-                                  context, map['username'], callback());
+                                  context, map['username']);
                             },
                             child: dannrow(
                               title: 'Username',
@@ -156,8 +156,7 @@ class _ProfileState extends State<Profile> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              provider.showbioDialogAlert(
-                                  context, map['bio'], callback());
+                              provider.showbioDialogAlert(context, map['bio']);
                             },
                             child: dannrow(
                               title: 'Bio',
@@ -206,7 +205,7 @@ class dannrow extends StatelessWidget {
         ListTile(
           title: Text(
             title,
-            style: Theme.of(context).textTheme.subtitle2,
+            style: TextStyle(color: Colors.grey[500]),
           ),
           leading: Icon(
             iconData,

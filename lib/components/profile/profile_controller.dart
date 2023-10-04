@@ -114,7 +114,8 @@ class ProfileController with ChangeNotifier {
                 ListTile(
                   onTap: () {
                     pickGalleryImage(context);
-                    Navigator.pop(context);
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => Profile()));
                   },
                   leading: Icon(
                     Icons.image,
@@ -151,7 +152,9 @@ class ProfileController with ChangeNotifier {
 
 //edit name/
   Future<void> showUserNameDialogAlert(
-      BuildContext context, String name, void callback) {
+    BuildContext context,
+    String name,
+  ) {
     nameController.text = name;
     return showDialog(
         context: context,
@@ -201,9 +204,8 @@ class ProfileController with ChangeNotifier {
                       .updateusernames(nameController.text, currentUser.email!)
                       .then((value) {
                     nameController.clear();
-                    callback;
+                    VoidCallback;
                   });
-
                   Navigator.pop(context);
                 },
                 child: Text(
@@ -221,7 +223,9 @@ class ProfileController with ChangeNotifier {
 
 //edit bio
   Future<void> showbioDialogAlert(
-      BuildContext context, String bio, void callback) {
+    BuildContext context,
+    String bio,
+  ) {
     bioController.text = bio;
     return showDialog(
         context: context,
@@ -257,13 +261,11 @@ class ProfileController with ChangeNotifier {
               ),
               TextButton(
                 onPressed: () {
-                  callback;
                   api
                       .updatebio(bioController.text, currentUser.email!)
                       .then((value) {
                     bioController.clear();
                   });
-
                   Navigator.pop(context);
                 },
                 child: Text(
