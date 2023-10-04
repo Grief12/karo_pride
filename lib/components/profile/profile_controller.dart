@@ -97,20 +97,20 @@ class ProfileController with ChangeNotifier {
       builder: (BuildContext) {
         return AlertDialog(
           content: Container(
-            height: 120,
+            height: 60,
             child: Column(
               children: [
-                ListTile(
-                  onTap: () {
-                    pickCameraImage(context);
-                    Navigator.pop(context);
-                  },
-                  leading: Icon(
-                    Icons.camera,
-                    color: Colors.black,
-                  ),
-                  title: Text('Camera'),
-                ),
+                // ListTile(
+                //   onTap: () {
+                //     pickCameraImage(context);
+                //     Navigator.pop(context);
+                //   },
+                //   leading: Icon(
+                //     Icons.camera,
+                //     color: Colors.black,
+                //   ),
+                //   title: Text('Camera'),
+                // ),
                 ListTile(
                   onTap: () {
                     pickGalleryImage(context);

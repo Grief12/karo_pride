@@ -75,10 +75,12 @@ class _FetchPostState extends State<FetchPost> {
     return Padding(
       padding: EdgeInsets.only(bottom: 5),
       child: Container(
+        // padding: EdgeInsets.only(top: 7),
         width: 500,
         child: Column(
           children: [
             Container(
+              padding: EdgeInsets.only(top: 16),
               color: Colors.white,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,

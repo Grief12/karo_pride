@@ -61,10 +61,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[300],
-      appBar: AppBar(
-        backgroundColor: Colors.grey[900],
-        foregroundColor: Colors.white,
-      ),
       body: FutureBuilder(
           future: api.getPost(),
           builder: (context, snapshot) {

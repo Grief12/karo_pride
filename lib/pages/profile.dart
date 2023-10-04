@@ -31,10 +31,11 @@ class _ProfileState extends State<Profile> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.grey[900],
+        title: Text("P R O F I L E"),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.logout),
-            onPressed: signout,
+            icon: Icon(Icons.refresh),
+            onPressed: callback,
           ),
         ],
       ),
@@ -164,6 +165,75 @@ class _ProfileState extends State<Profile> {
                               iconData: Icons.person_outlined,
                             ),
                           ),
+                          SizedBox(
+                            height: 50,
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return Center(
+                                        child: Container(
+                                            width: 300,
+                                            height: 120,
+                                            decoration: BoxDecoration(
+                                                color: Colors.white),
+                                            child: Column(
+                                              children: [
+                                                SizedBox(height: 30),
+                                                Text(
+                                                    "Apakah anda ingin keluar?"),
+                                                SizedBox(
+                                                  height: 8,
+                                                ),
+                                                Align(
+                                                  alignment: Alignment.center,
+                                                  child: Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: Text("No"),
+                                                      ),
+                                                      SizedBox(
+                                                        width: 25,
+                                                      ),
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          signout();
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: Text("Yes"),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            )));
+                                  });
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(15),
+                              child: Text(
+                                "L O G O U T",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 18),
+                              ),
+                              decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  borderRadius: BorderRadius.circular(10)),
+                            ),
+                          )
                         ],
                       );
                     } else {
@@ -209,7 +279,7 @@ class dannrow extends StatelessWidget {
           ),
           leading: Icon(
             iconData,
-            color: Colors.black,
+            color: Colors.grey[500],
           ),
           trailing: Text(
             value,
