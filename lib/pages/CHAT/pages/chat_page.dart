@@ -99,7 +99,6 @@ class _ChatPageState extends State<ChatPage> {
               widget.receiverEmail,
               style: TextStyle(fontSize: 18),
             ),
-            SizedBox(height: 5),
           ],
         ),
       ),

@@ -79,7 +79,6 @@ class _ChatState extends State<Chat> with WidgetsBindingObserver {
                   children: [
                     Text(data['email']),
                     SizedBox(height: 5),
-                    Text(data['status']),
                   ],
                 ),
               ],

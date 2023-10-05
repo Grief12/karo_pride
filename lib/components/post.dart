@@ -1,8 +1,11 @@
 import 'package:b_social02/Api.dart';
+import 'package:b_social02/components/Navbar.dart';
+import 'package:b_social02/pages/Like.dart';
 import 'package:flutter/material.dart';
 import 'package:b_social02/pages/Comment.dart';
 import 'package:b_social02/pages/PostProfile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class FetchPost extends StatefulWidget {
   final int id;
@@ -24,6 +27,7 @@ class _FetchPostState extends State<FetchPost> {
   late int likes = widget.like;
   late int posId = widget.id;
   final currentUser = FirebaseAuth.instance.currentUser!;
+  String? user;
   var arrData;
   late List likearrConf = widget.arrLikes
       .where((element) => element['post_id'] == widget.id)
@@ -43,6 +47,8 @@ class _FetchPostState extends State<FetchPost> {
     super.initState();
     arrData = searchData();
     pressed = arrData == currentUser.email ? false : true;
+    user = currentUser.email;
+    likes = likearrConf.length;
   }
 
   @override
@@ -58,6 +64,9 @@ class _FetchPostState extends State<FetchPost> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  SizedBox(
+                    height: 15,
+                  ),
                   Container(
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
@@ -98,10 +107,59 @@ class _FetchPostState extends State<FetchPost> {
                               context: context,
                               builder: (context) => Padding(
                                     padding: EdgeInsets.all(20),
-                                    child: Container(
-                                      child: Image.network(
-                                        widget.img,
-                                        fit: BoxFit.fill,
+                                    child: GestureDetector(
+                                      onTap: () => Navigator.pop(context),
+                                      onLongPress: () => showDialog(
+                                          context: context,
+                                          builder: (context) => Center(
+                                                child: GestureDetector(
+                                                    onTap: () async {
+                                                      print("Download");
+                                                      await launchUrl(
+                                                          Uri.parse(widget.img),
+                                                          mode: LaunchMode
+                                                              .externalApplication);
+                                                      //download(widget.img);
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: Container(
+                                                      color: Colors.white,
+                                                      width: 225,
+                                                      height: 75,
+                                                      child: Padding(
+                                                        padding:
+                                                            EdgeInsets.all(8),
+                                                        child: Row(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              Icon(Icons
+                                                                  .download),
+                                                              SizedBox(
+                                                                width: 20,
+                                                              ),
+                                                              Center(
+                                                                child: Text(
+                                                                  "Download",
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        18,
+                                                                  ),
+                                                                ),
+                                                              )
+                                                            ]),
+                                                      ),
+                                                    )),
+                                              )),
+                                      child: AspectRatio(
+                                        aspectRatio: 1 / 1,
+                                        child: Container(
+                                          child: Image.network(
+                                            widget.img,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   )),
@@ -139,13 +197,23 @@ class _FetchPostState extends State<FetchPost> {
                                 });
                                 Api().postLikeConfirm(
                                     widget.id, pressed, currentUser.email!);
-                                Api().like(widget.id, pressed);
+                                //Api().like(widget.id, pressed);
                                 //postLikeToFirebase();
                               },
                               icon: pressed == true
                                   ? Icon(Icons.thumb_up_outlined)
                                   : Icon(Icons.thumb_up)),
-                          Text(likes.toString()),
+                          SizedBox(
+                            width: 7,
+                          ),
+                          GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Like(widget.id)));
+                              },
+                              child: Text(likes.toString())),
                           SizedBox(
                             width: 10,
                           ),
@@ -154,10 +222,52 @@ class _FetchPostState extends State<FetchPost> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            Comment(widget.id)));
+                                        builder: (context) => Comment(
+                                            widget.id, widget.profile)));
                               },
-                              icon: Icon(Icons.comment_outlined))
+                              icon: Icon(Icons.comment_outlined)),
+                          user == currentUser.email
+                              ? IconButton(
+                                  onPressed: () async {
+                                    await Api()
+                                        .deletePost(widget.id)
+                                        .whenComplete(() {
+                                      setState(() {});
+                                      showDialog(
+                                          barrierDismissible: false,
+                                          context: context,
+                                          builder: (context) => Center(
+                                                child: GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.pushReplacement(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder:
+                                                                  (context) =>
+                                                                      Navbar()));
+                                                    },
+                                                    child: Container(
+                                                      color: Colors.white,
+                                                      width: 225,
+                                                      height: 75,
+                                                      child: Padding(
+                                                        padding:
+                                                            EdgeInsets.all(8),
+                                                        child: Center(
+                                                          child: Text(
+                                                              "Post dihapus",
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                      16)),
+                                                        ),
+                                                      ),
+                                                    )),
+                                              ));
+                                      setState(() {});
+                                    });
+                                  },
+                                  icon: Icon(Icons.delete_outlined))
+                              : Container()
                         ],
                       ),
                       Text(widget.msg),
