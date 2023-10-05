@@ -2,15 +2,13 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:b_social02/auth/Token.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class Api {
-  final String urlPost = 'http://127.0.0.1:8000/api/post';
-  final String urlUser = 'http://127.0.0.1:8000/api/user';
-  final String urlChat = 'http://127.0.0.1:8000/api/chat';
-  final String urlProfil = 'http://127.0.0.1:8000/api/profil';
-  final String urlKomen = 'http://127.0.0.1:8000/api/komen';
-  final currentUser = FirebaseAuth.instance.currentUser!;
+  final String urlPost = 'https://api-bsocial.000webhostapp.com/api/post';
+  final String urlUser = 'https://api-bsocial.000webhostapp.com/api/user';
+  final String urlChat = 'https://api-bsocial.000webhostapp.com/api/chat';
+  final String urlProfil = 'https://api-bsocial.000webhostapp.com/api/profil';
+  final String urlKomen = 'https://api-bsocial.000webhostapp.com/api/komen';
   Token token = Token();
 
   Future getPost() async {
@@ -28,7 +26,7 @@ class Api {
     final result = await http.post(Uri.parse(urlPost + '/like/${id}'), body: {
       "likes": like.toString(),
       "pressed": confirm.toString(),
-      "token": token.getToken(currentUser.email!)
+      "token": token.getToken()
     });
 
     print(json.decode(result.body));
@@ -43,20 +41,16 @@ class Api {
   Future postLikeConfirm(id, bool pressed, email) async {
     int confirm = pressed == false ? 0 : 1;
     if (confirm == 0) {
-      final result = await http
-          .post(Uri.parse(urlPost + '/like/${id}/${email}'), body: {
-        "confirm": confirm.toString(),
-        "token": token.getToken(currentUser.email!)
-      });
+      final result = await http.post(
+          Uri.parse(urlPost + '/like/${id}/${email}'),
+          body: {"confirm": confirm.toString(), "token": token.getToken()});
       print("data berhasil dipost");
       return json.decode(result.body);
     }
     if (confirm == 1) {
-      final result = await http
-          .delete(Uri.parse(urlPost + '/like/${id}/${email}'), body: {
-        "confirm": confirm.toString(),
-        "token": token.getToken(currentUser.email!)
-      });
+      final result = await http.delete(
+          Uri.parse(urlPost + '/like/${id}/${email}'),
+          body: {"confirm": confirm.toString(), "token": token.getToken()});
       print("data berhasil dipost");
       return json.decode(result.body);
     }
@@ -64,10 +58,8 @@ class Api {
 
   Future deletePost(int id) async {
     print("delte");
-    final res = await http.delete(Uri.parse(urlPost), body: {
-      "id": id.toString(),
-      "token": token.getToken(currentUser.email!)
-    });
+    final res = await http.delete(Uri.parse(urlPost),
+        body: {"id": id.toString(), "token": token.getToken()});
     print(json.decode(res.body));
     return json.decode(res.body);
   }
@@ -79,7 +71,7 @@ class Api {
         "message": msg,
         "likes": like.toString(),
         "imgurl": img,
-        "token": token.getToken(currentUser.email!)
+        "token": token.getToken()
       });
 
       return json.decode(res.body);
@@ -88,7 +80,7 @@ class Api {
         "username": user,
         "message": msg,
         "likes": like.toString(),
-        "token": token.getToken(currentUser.email!)
+        "token": token.getToken()
       });
 
       return json.decode(result.body);
@@ -133,8 +125,8 @@ class Api {
       "email": email,
       "username": username,
       "password": password,
-      "bio": "",
-      "token": token.getToken(currentUser.email!)
+      "bio": "Halo",
+      "token": token.getToken()
     });
     print("berhasil di pos");
     return json.decode(result.body);
@@ -154,11 +146,8 @@ class Api {
   Future postKomen(String pesan, int id, String email) async {
     print("berhasil");
     print(id);
-    final result = await http.post(Uri.parse(urlKomen + '/${id}'), body: {
-      "pesan": pesan,
-      "email": email,
-      "token": token.getToken(currentUser.email!)
-    });
+    final result = await http.post(Uri.parse(urlKomen + '/${id}'),
+        body: {"pesan": pesan, "email": email, "token": token.getToken()});
     print("berhasil di post");
     return json.decode(result.body);
   }
