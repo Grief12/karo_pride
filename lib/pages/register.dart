@@ -39,8 +39,6 @@ class _RegisterPageState extends State<RegisterPage> {
       displayMassage("Passwod don't match");
       return;
     }
-    await api.registerUser(emailTextController.text,
-        emailTextController.text.split('@')[0], passwordTextController.text);
     //try creating user
     try {
       UserCredential userCredential = await FirebaseAuth.instance
@@ -52,6 +50,8 @@ class _RegisterPageState extends State<RegisterPage> {
         'uid': userCredential.user!.uid,
         'email': emailTextController.text,
       });
+      await api.registerUser(emailTextController.text,
+          emailTextController.text.split('@')[0], passwordTextController.text);
       //pop loading circle
       if (context.mounted) Navigator.pop(context);
     } on FirebaseAuthException catch (e) {

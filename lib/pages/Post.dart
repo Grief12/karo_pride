@@ -1,7 +1,10 @@
 import 'dart:io';
 import 'package:b_social02/components/Navbar.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+<<<<<<< HEAD
 //import 'package:b_social02/pages/crop.dart';
+=======
+>>>>>>> 16488fd8044bd0d75c42c5e342062d0b2442b1d2
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 //import 'package:b_social02/pages/home.dart';
@@ -27,7 +30,7 @@ class _CreateState extends State<Create> {
   final TextEditingController postController = TextEditingController();
   final currentUser = FirebaseAuth.instance.currentUser!;
   final _formkey = GlobalKey<FormState>();
-  PlatformFile? pickedFile;
+  PlatformFile? pickedFile = null;
   String? imgUrl;
 
   Api api = Api();
@@ -110,8 +113,24 @@ class _CreateState extends State<Create> {
                 child: Padding(
                     padding: EdgeInsets.all(20),
                     child: Center(
-                        child: IconButton(
-                            onPressed: insfoto, icon: Icon(Icons.add)))),
+                        child: pickedFile == null
+                            ? IconButton(
+                                onPressed: insfoto, icon: Icon(Icons.add))
+                            : GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    pickedFile = null;
+                                  });
+                                },
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.image),
+                                    Text(pickedFile!.name)
+                                  ],
+                                ),
+                              ))),
               ),
               const SizedBox(
                 child: Padding(padding: EdgeInsets.only(bottom: 20)),
@@ -128,10 +147,10 @@ class _CreateState extends State<Create> {
                         child: TextFormField(
                       controller: postController,
                       validator: (value) {
-                        if (value!.isEmpty && pickedFile == null) {
-                          return 'Harap isi foto atau kata-kata';
+                        if (value!.isEmpty || pickedFile == null) {
+                          return 'Harap isi foto dan kata-kata';
                         }
-                        ;
+
                         return null;
                       },
                       minLines: 1,
@@ -142,8 +161,6 @@ class _CreateState extends State<Create> {
                     )),
                     IconButton(
                         onPressed: () async {
-                          //await upFoto();
-                          print('berhasil');
                           if (_formkey.currentState!.validate()) {
                             if (pickedFile == null &&
                                 postController.text.isNotEmpty) {
@@ -163,15 +180,11 @@ class _CreateState extends State<Create> {
                               await upFoto();
                               print(pickedFile!.name);
                             }
+
+                            pickedFile = null;
+                            Navigator.pop(context);
                           }
-                          pickedFile = null;
-                          PersistentNavBarNavigator.pushNewScreen(
-                            context,
-                            screen: Navbar(),
-                            withNavBar: false,
-                            pageTransitionAnimation:
-                                PageTransitionAnimation.cupertino,
-                          );
+
                           //Navigator.pop(context);
                           //Navigator.push(
                           //    context,

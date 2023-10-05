@@ -46,6 +46,10 @@ dependencies:
   image_cropper: ^3.0.3
   image_picker: ^0.8.6
   provider: ^6.0.5
+  dio: ^5.3.3
+  url_launcher: ^6.1.10
+
+
 
 
 
@@ -103,4 +107,3 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
   assets:
     - assets/images/splash.jpg
-
