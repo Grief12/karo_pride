@@ -5,6 +5,7 @@ class Messages {
   final String senderEmail;
   final String receiverId;
   final String message;
+  final String? imgUrl;
   final Timestamp timestamp;
 
   Messages({
@@ -13,15 +14,26 @@ class Messages {
     required this.receiverId,
     required this.message,
     required this.timestamp,
+    this.imgUrl,
   });
 
   Map<String, dynamic> toMap() {
-    return {
-      'senderId': senderId,
-      'senderEmail': senderEmail,
-      'receiverId': receiverId,
-      'message': message,
-      'timestamp': timestamp,
-    };
+    if (imgUrl != null) {
+      return {
+        'senderId': senderId,
+        'senderEmail': senderEmail,
+        'receiverId': receiverId,
+        'message': imgUrl,
+        'timestamp': timestamp,
+      };
+    } else {
+      return {
+        'senderId': senderId,
+        'senderEmail': senderEmail,
+        'receiverId': receiverId,
+        'message': message,
+        'timestamp': timestamp,
+      };
+    }
   }
 }

@@ -1,20 +1,21 @@
+import 'dart:io';
 import 'package:b_social02/Api.dart';
 import 'package:b_social02/components/bubblechat.dart';
 import 'package:b_social02/components/bublechat2.dart';
 import 'package:b_social02/components/textfield.dart';
 import 'package:b_social02/pages/CHAT/service/chat_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 
 class ChatPage extends StatefulWidget {
-  //final String receiverUsername;
   final String receiverEmail;
   final String receiverUid;
 
   const ChatPage({
     super.key,
-    //required this.receiverUsername,
     required this.receiverEmail,
     required this.receiverUid,
   });
@@ -26,15 +27,63 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   Api api = Api();
   final currentUser = FirebaseAuth.instance.currentUser!;
+  PlatformFile? pickedFile;
+  String? imgUrl;
   final TextEditingController _messageController = TextEditingController();
   final ChatService _chatService = ChatService();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   void sendMessage() async {
+    if (pickedFile != null) {
+      upFoto();
+    }
     if (_messageController.text.isNotEmpty) {
       await _chatService.sendMessages(
-          widget.receiverUid, _messageController.text);
+        widget.receiverUid,
+        _messageController.text,
+        imgUrl,
+      );
       _messageController.clear();
+    }
+  }
+
+  void insertphoto() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom, allowedExtensions: ['jpg', 'jpeg', 'png']);
+
+    if (result != null) {
+      setState(() {
+        pickedFile = result.files.first;
+      });
+
+      print(pickedFile!.name);
+    } else {
+      // User canceled the picker
+      setState(() {
+        pickedFile = null;
+      });
+    }
+  }
+
+  Future upFoto() async {
+    File file = File(pickedFile!.path!);
+    String filename = pickedFile!.name;
+    String ext = pickedFile!.extension!;
+    final ref =
+        await firebase_storage.FirebaseStorage.instance.ref('$filename.$ext');
+    final up = ref.putFile(file);
+
+    final snapshot = await up.whenComplete(() {});
+
+    final urlImg = await snapshot.ref.getDownloadURL();
+
+    try {
+      await snapshot;
+      await urlImg;
+      imgUrl = urlImg;
+    } on firebase_storage.FirebaseStorage catch (e) {
+      print(e);
     }
   }
 
@@ -50,6 +99,7 @@ class _ChatPageState extends State<ChatPage> {
               widget.receiverEmail,
               style: TextStyle(fontSize: 18),
             ),
+            SizedBox(height: 5),
           ],
         ),
       ),
@@ -120,8 +170,8 @@ class _ChatPageState extends State<ChatPage> {
   Widget _buildMessageInput() {
     return Row(
       children: [
-        //textfield
         SizedBox(width: 8),
+        //textfielf
         Expanded(
             child: MyTextField(
           controller: _messageController,
@@ -131,10 +181,16 @@ class _ChatPageState extends State<ChatPage> {
 
         //button
         IconButton(
+            onPressed: insertphoto,
+            icon: Icon(
+              Icons.image,
+              size: 30,
+            )),
+        IconButton(
           padding: EdgeInsets.all(10.0),
           onPressed: sendMessage,
           icon: Icon(
-            Icons.arrow_upward,
+            Icons.send,
             size: 30,
           ),
         )

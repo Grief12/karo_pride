@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:b_social02/Api.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 class Chat extends StatefulWidget {
   const Chat({super.key});
@@ -12,13 +11,13 @@ class Chat extends StatefulWidget {
   State<Chat> createState() => _ChatState();
 }
 
-class _ChatState extends State<Chat> {
+class _ChatState extends State<Chat> with WidgetsBindingObserver {
+  Map<String, dynamic>? userMap;
   Api api = Api();
   final currentUser = FirebaseAuth.instance.currentUser!;
-
-  void signOut() {
-    FirebaseAuth.instance.signOut();
-  }
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  AppLifecycleState state = AppLifecycleState.detached;
 
   //instance of auth
   @override
@@ -28,12 +27,6 @@ class _ChatState extends State<Chat> {
       appBar: AppBar(
         title: Text("Chat"),
         backgroundColor: Colors.grey[900],
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: signOut,
-          )
-        ],
       ),
       body: _buildUserList(),
     );
@@ -45,6 +38,9 @@ class _ChatState extends State<Chat> {
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return const Text('error');
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Text('loading..');
           }
           return ListView(
             children:
@@ -79,8 +75,11 @@ class _ChatState extends State<Chat> {
                 ),
                 const SizedBox(width: 20),
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(data['email']),
+                    SizedBox(height: 5),
+                    Text(data['status']),
                   ],
                 ),
               ],
@@ -102,38 +101,4 @@ class _ChatState extends State<Chat> {
     }
     return Container();
   }
-
-  //   return FutureBuilder(
-  //       future: api.fetchChat(currentUser.email!),
-  //       builder: (context, snapshot) {
-  //         if (snapshot.hasData) {
-  //           return ListView.builder(
-  //               itemCount: snapshot.data['akun'].length,
-  //               itemBuilder: (context, index) {
-  //                 final post = snapshot.data['akun'][index];
-  //                 return FetchChat(
-  //                   post['username'],
-  //                   post['email'],
-  //                   () {
-  //                     //pass the clicked user
-  //                     PersistentNavBarNavigator.pushNewScreen(
-  //                       context,
-  //                       withNavBar: false,
-  //                       screen: ChatPage(
-  //                         receiverUsername: post['username'],
-  //                         receiverEmail: post['email'],
-  //                       ),
-  //                     );
-  //                   },
-  //                 );
-  //               });
-  //         }
-  //         return Center(
-  //           child: Column(
-  //             mainAxisAlignment: MainAxisAlignment.center,
-  //             children: [CircularProgressIndicator(), Text('Please wait')],
-  //           ),
-  //         );
-  //       });
-  // }
 }

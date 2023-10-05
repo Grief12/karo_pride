@@ -45,6 +45,8 @@ dependencies:
   path_provider: ^2.0.13
   image_cropper: ^3.0.3
   image_picker: ^0.8.6
+  intl: ^0.18.1
+  uuid: ^4.1.0
 
 
 
