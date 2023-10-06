@@ -1,6 +1,5 @@
 import 'dart:io';
-import 'package:b_social02/components/Navbar.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:b_social02/pages/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 //import 'package:b_social02/pages/home.dart';
@@ -88,6 +87,11 @@ class _CreateState extends State<Create> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => HomePage())),
+        ),
         backgroundColor: Colors.grey[900],
         foregroundColor: Colors.white,
       ),
@@ -178,7 +182,10 @@ class _CreateState extends State<Create> {
                             }
 
                             pickedFile = null;
-                            Navigator.pop(context);
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HomePage()));
                           }
 
                           //Navigator.pop(context);

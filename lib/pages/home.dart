@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
         foregroundColor: Colors.white,
         child: Icon(Icons.send),
         onPressed: () {
-          Navigator.push(
+          Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => Create()));
         },
       ),
