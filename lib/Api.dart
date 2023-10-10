@@ -4,11 +4,11 @@ import 'dart:async';
 import 'package:b_social02/auth/Token.dart';
 
 class Api {
-  final String urlPost = 'http://127.0.0.1:8000/api/post';
-  final String urlUser = 'http://127.0.0.1:8000/api/user';
-  final String urlChat = 'http://127.0.0.1:8000/api/chat';
-  final String urlProfil = 'http://127.0.0.1:8000/api/profil';
-  final String urlKomen = 'http://127.0.0.1:8000/api/komen';
+  final String urlPost = 'http://192.168.100.20:8000/api/post';
+  final String urlUser = 'http://192.168.100.20:8000/api/user';
+  final String urlChat = 'http://192.168.100.20:8000/api/chat';
+  final String urlProfil = 'http://192.168.100.20:8000/api/profil';
+  final String urlKomen = 'http://192.168.100.20:8000/api/komen';
   Token token = Token();
 
   Future getPost() async {
@@ -125,7 +125,7 @@ class Api {
       "email": email,
       "username": username,
       "password": password,
-      "bio": "",
+      "bio": "Halo",
       "token": token.getToken()
     });
     print("berhasil di pos");

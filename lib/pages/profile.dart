@@ -35,7 +35,7 @@ class _ProfileState extends State<Profile> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.refresh),
-            onPressed: callback,
+            onPressed: signout,
           ),
         ],
       ),

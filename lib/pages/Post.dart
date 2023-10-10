@@ -1,10 +1,7 @@
 import 'dart:io';
 import 'package:b_social02/components/Navbar.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
-<<<<<<< HEAD
 //import 'package:b_social02/pages/crop.dart';
-=======
->>>>>>> 16488fd8044bd0d75c42c5e342062d0b2442b1d2
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 //import 'package:b_social02/pages/home.dart';
