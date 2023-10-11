@@ -1,20 +1,19 @@
 import 'package:b_social02/components/post.dart';
-import 'package:b_social02/pages/Post.dart';
-import 'package:b_social02/pages/MyPost.dart';
 import 'package:flutter/material.dart';
 import 'package:b_social02/Api.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class MyPost extends StatefulWidget {
+  const MyPost({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<MyPost> createState() => _MyPostState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _MyPostState extends State<MyPost> {
   //sign out
   Api api = Api();
+  final currentUser = FirebaseAuth.instance.currentUser!;
 
   void signOut() {
     FirebaseAuth.instance.signOut();
@@ -23,7 +22,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> refresh() {
     setState(() {
       FutureBuilder(
-          future: api.getPost(),
+          future: api.getMyPost(currentUser.email!),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return ListView.builder(
@@ -71,32 +70,6 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: Colors.grey[900],
         foregroundColor: Colors.white,
-      ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            backgroundColor: Colors.black,
-            foregroundColor: Color(0xfff67070),
-            child: Icon(Icons.image),
-            onPressed: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => MyPost()));
-            },
-          ),
-          SizedBox(
-            height: 12,
-          ),
-          FloatingActionButton(
-            backgroundColor: Colors.black,
-            foregroundColor: Colors.white,
-            child: Icon(Icons.send),
-            onPressed: () {
-              Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (context) => Create()));
-            },
-          ),
-        ],
       ),
       body: FutureBuilder(
           future: api.getPost(),
