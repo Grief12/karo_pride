@@ -151,10 +151,7 @@ class ProfileController with ChangeNotifier {
   }
 
 //edit name/
-  Future<void> showUserNameDialogAlert(
-    BuildContext context,
-    String name,
-  ) {
+  Future<void> showUserNameDialogAlert(BuildContext context, String name) {
     nameController.text = name;
     return showDialog(
         context: context,
@@ -204,7 +201,6 @@ class ProfileController with ChangeNotifier {
                       .updateusernames(nameController.text, currentUser.email!)
                       .then((value) {
                     nameController.clear();
-                    VoidCallback;
                   });
                   Navigator.pop(context);
                 },

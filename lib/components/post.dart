@@ -210,9 +210,7 @@ class _FetchPostState extends State<FetchPost> {
                           IconButton(
                               onPressed: () {
                                 setState(() {
-                                  print(pressed);
                                   pressed = !pressed;
-                                  print(pressed);
                                   if (pressed == true && likes > 0) {
                                     likes = likes - 1;
                                   } else if (pressed != true && likes == 0) {
