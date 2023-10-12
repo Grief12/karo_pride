@@ -45,7 +45,7 @@ class _PostProfileState extends State<PostProfile> {
                             )),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(100),
-                          child: map['profile'].toString() == ""
+                          child: map['profile'] == null
                               ? Icon(
                                   Icons.person,
                                   size: 40,
@@ -76,6 +76,11 @@ class _PostProfileState extends State<PostProfile> {
                       height: 40,
                     ),
                     dannrow(
+                      title: 'Email',
+                      value: map['email'],
+                      iconData: Icons.email_outlined,
+                    ),
+                    dannrow(
                       title: 'Username',
                       value: map['username'],
                       iconData: Icons.person_outline,
@@ -83,7 +88,7 @@ class _PostProfileState extends State<PostProfile> {
                     dannrow(
                       title: 'Bio',
                       value: map['bio'],
-                      iconData: Icons.person_outlined,
+                      iconData: Icons.edit_outlined,
                     ),
                   ],
                 );

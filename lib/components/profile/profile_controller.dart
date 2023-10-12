@@ -44,12 +44,12 @@ class ProfileController with ChangeNotifier {
 
       await upFoto();
 
-       PersistentNavBarNavigator.pushNewScreen(
-         context,
-         screen: Profile(),
-         withNavBar: true,
-         pageTransitionAnimation: PageTransitionAnimation.cupertino,
-       );
+      PersistentNavBarNavigator.pushNewScreen(
+        context,
+        screen: Profile(),
+        withNavBar: true,
+        pageTransitionAnimation: PageTransitionAnimation.cupertino,
+      );
 
       print(pickedFile!.name);
       // Navigator.push(context,
@@ -97,24 +97,25 @@ class ProfileController with ChangeNotifier {
       builder: (BuildContext) {
         return AlertDialog(
           content: Container(
-            height: 120,
+            height: 60,
             child: Column(
               children: [
-                ListTile(
-                  onTap: () {
-                    pickCameraImage(context);
-                    Navigator.pop(context);
-                  },
-                  leading: Icon(
-                    Icons.camera,
-                    color: Colors.black,
-                  ),
-                  title: Text('Camera'),
-                ),
+                // ListTile(
+                //   onTap: () {
+                //     pickCameraImage(context);
+                //     Navigator.pop(context);
+                //   },
+                //   leading: Icon(
+                //     Icons.camera,
+                //     color: Colors.black,
+                //   ),
+                //   title: Text('Camera'),
+                // ),
                 ListTile(
                   onTap: () {
                     pickGalleryImage(context);
-                    Navigator.pop(context);
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => Profile()));
                   },
                   leading: Icon(
                     Icons.image,
@@ -217,7 +218,10 @@ class ProfileController with ChangeNotifier {
   }
 
 //edit bio
-  Future<void> showbioDialogAlert(BuildContext context, String bio) {
+  Future<void> showbioDialogAlert(
+    BuildContext context,
+    String bio,
+  ) {
     bioController.text = bio;
     return showDialog(
         context: context,

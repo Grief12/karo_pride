@@ -7,6 +7,7 @@ import 'package:b_social02/pages/PostProfile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+//import 'package:b_social02/components/like_button.dart';
 class FetchPost extends StatefulWidget {
   final int id;
   final profile;
@@ -36,9 +37,33 @@ class _FetchPostState extends State<FetchPost> {
   late String? email = currentUser.email;
 
   searchData() {
-    for (int i = 0; i < likearrConf.length; i++) {
-      if (currentUser.email == likearrConf[i]['email']) {
-        return likearrConf[i]['email'];
+    for (int i = 0; i < widget.arrLikes.length; i++) {
+      if (widget.id == widget.arrLikes[i]['post_id']) {
+        print(widget.arrLikes.length);
+        return widget.arrLikes;
+      }
+    }
+  }
+
+  loopment(panjang) {
+    for (int i = 0; i < panjang.length;) {
+      if (widget.id == widget.arrLikes[i]['post_id']) {
+        if (currentUser.email == widget.arrLikes[i]['email']) {
+          setState(() {
+            pressed = false;
+          });
+          return false;
+        } else {
+          setState(() {
+            pressed = true;
+          });
+          return true;
+        }
+      } else {
+        setState(() {
+          pressed = true;
+        });
+        return true;
       }
     }
   }
@@ -57,10 +82,12 @@ class _FetchPostState extends State<FetchPost> {
     return Padding(
       padding: EdgeInsets.only(bottom: 5),
       child: Container(
+        // padding: EdgeInsets.only(top: 7),
         width: 500,
         child: Column(
           children: [
             Container(
+              padding: EdgeInsets.only(top: 16),
               color: Colors.white,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
