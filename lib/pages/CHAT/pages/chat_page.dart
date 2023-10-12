@@ -32,17 +32,12 @@ class _ChatPageState extends State<ChatPage> {
   final TextEditingController _messageController = TextEditingController();
   final ChatService _chatService = ChatService();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   void sendMessage() async {
-    if (pickedFile != null) {
-      upFoto();
-    }
-    if (_messageController.text.isNotEmpty) {
+    if (_messageController.text.isNotEmpty && pickedFile == null) {
       await _chatService.sendMessages(
         widget.receiverUid,
         _messageController.text,
-        imgUrl,
       );
       _messageController.clear();
     }
@@ -70,8 +65,7 @@ class _ChatPageState extends State<ChatPage> {
     File file = File(pickedFile!.path!);
     String filename = pickedFile!.name;
     String ext = pickedFile!.extension!;
-    final ref =
-        await firebase_storage.FirebaseStorage.instance.ref('$filename.$ext');
+    final ref = firebase_storage.FirebaseStorage.instance.ref('$filename.$ext');
     final up = ref.putFile(file);
 
     final snapshot = await up.whenComplete(() {});
@@ -79,8 +73,8 @@ class _ChatPageState extends State<ChatPage> {
     final urlImg = await snapshot.ref.getDownloadURL();
 
     try {
-      await snapshot;
-      await urlImg;
+      snapshot;
+      urlImg;
       imgUrl = urlImg;
     } on firebase_storage.FirebaseStorage catch (e) {
       print(e);
@@ -97,7 +91,7 @@ class _ChatPageState extends State<ChatPage> {
           children: [
             Text(
               widget.receiverEmail,
-              style: TextStyle(fontSize: 18),
+              style: const TextStyle(fontSize: 18),
             ),
           ],
         ),
@@ -169,7 +163,7 @@ class _ChatPageState extends State<ChatPage> {
   Widget _buildMessageInput() {
     return Row(
       children: [
-        SizedBox(width: 8),
+        const SizedBox(width: 8),
         //textfielf
         Expanded(
             child: MyTextField(
@@ -181,14 +175,14 @@ class _ChatPageState extends State<ChatPage> {
         //button
         IconButton(
             onPressed: insertphoto,
-            icon: Icon(
+            icon: const Icon(
               Icons.image,
               size: 30,
             )),
         IconButton(
-          padding: EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(10.0),
           onPressed: sendMessage,
-          icon: Icon(
+          icon: const Icon(
             Icons.send,
             size: 30,
           ),

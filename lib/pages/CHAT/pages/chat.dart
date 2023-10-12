@@ -14,10 +14,7 @@ class Chat extends StatefulWidget {
 class _ChatState extends State<Chat> with WidgetsBindingObserver {
   Map<String, dynamic>? userMap;
   Api api = Api();
-  final currentUser = FirebaseAuth.instance.currentUser!;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  AppLifecycleState state = AppLifecycleState.detached;
+  final currentUser = FirebaseAuth.instance.currentUser;
 
   //instance of auth
   @override
@@ -25,7 +22,7 @@ class _ChatState extends State<Chat> with WidgetsBindingObserver {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text("Chat"),
+        title: const Text("Chat"),
         backgroundColor: Colors.grey[900],
       ),
       body: _buildUserList(),
@@ -53,22 +50,22 @@ class _ChatState extends State<Chat> with WidgetsBindingObserver {
   Widget _buildUserItem(DocumentSnapshot document) {
     Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
 
-    if (currentUser.email != data['email']) {
+    if (currentUser!.email != data['email']) {
       return ListTile(
         title: Expanded(
           child: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               border: Border(
                 bottom: BorderSide(
-                  color: const Color.fromARGB(255, 138, 137, 137),
+                  color: Color.fromARGB(255, 138, 137, 137),
                 ),
               ),
             ),
-            padding: EdgeInsets.fromLTRB(0, 25, 0, 25),
+            padding: const EdgeInsets.fromLTRB(0, 25, 0, 25),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Column(
+                const Column(
                   children: [
                     Icon(Icons.message_outlined),
                   ],
@@ -78,7 +75,7 @@ class _ChatState extends State<Chat> with WidgetsBindingObserver {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(data['email']),
-                    SizedBox(height: 5),
+                    const SizedBox(height: 5),
                   ],
                 ),
               ],

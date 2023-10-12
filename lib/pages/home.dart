@@ -41,6 +41,11 @@ class _HomePageState extends State<HomePage> {
                         like);
                   });
             }
+            if (!snapshot.hasData) {
+              return Center(
+                child: Text("Belum ada postingan, post lah sesuatu"),
+              );
+            }
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

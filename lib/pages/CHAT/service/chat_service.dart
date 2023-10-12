@@ -1,5 +1,4 @@
 import 'package:b_social02/pages/CHAT/model/message.dart';
-//import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,7 +9,9 @@ class ChatService extends ChangeNotifier {
 
   //SEND MESSAGE
   Future<void> sendMessages(
-      String receiverId, String message, String? imgUrl) async {
+    String receiverId,
+    String message,
+  ) async {
     //get current user info
     final String currentUserId = _firebaseAuth.currentUser!.uid;
     final String currentUserEmail = _firebaseAuth.currentUser!.email.toString();
@@ -23,7 +24,6 @@ class ChatService extends ChangeNotifier {
       receiverId: receiverId,
       message: message,
       timestamp: timestamp,
-      imgUrl: imgUrl,
     );
 
     //construct chat room
