@@ -68,11 +68,12 @@ class _MyPostState extends State<MyPost> {
     return Scaffold(
       backgroundColor: Colors.grey[300],
       appBar: AppBar(
+        title: Text("Post saya"),
         backgroundColor: Colors.grey[900],
         foregroundColor: Colors.white,
       ),
       body: FutureBuilder(
-          future: api.getPost(),
+          future: api.getMyPost(currentUser.email!),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return RefreshIndicator(
