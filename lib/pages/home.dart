@@ -1,4 +1,5 @@
 import 'package:b_social02/components/post.dart';
+import 'package:b_social02/pages/Post.dart';
 import 'package:flutter/material.dart';
 import 'package:b_social02/Api.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -66,6 +67,15 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[300],
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
+        child: Icon(Icons.send),
+        onPressed: () {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => Create()));
+        },
+      ),
       body: FutureBuilder(
           future: api.getPost(),
           builder: (context, snapshot) {
