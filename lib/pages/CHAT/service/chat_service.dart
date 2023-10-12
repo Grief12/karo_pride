@@ -11,6 +11,7 @@ class ChatService extends ChangeNotifier {
   Future<void> sendMessages(
     String receiverId,
     String message,
+    String? imgUrl,
   ) async {
     //get current user info
     final String currentUserId = _firebaseAuth.currentUser!.uid;
@@ -24,6 +25,7 @@ class ChatService extends ChangeNotifier {
       receiverId: receiverId,
       message: message,
       timestamp: timestamp,
+      imgUrl: imgUrl,
     );
 
     //construct chat room
@@ -52,4 +54,6 @@ class ChatService extends ChangeNotifier {
         .orderBy('timestamp', descending: false)
         .snapshots();
   }
+
+  //SEND PHOTO
 }

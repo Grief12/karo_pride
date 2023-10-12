@@ -18,6 +18,12 @@ class Api {
     return json.decode(result.body);
   }
 
+  Future getMyPost(String email) async {
+    final result = await http.get(Uri.parse(urlPost + '/${email}'));
+
+    return json.decode(result.body);
+  }
+
   Future like(id, bool pressed) async {
     print("id post ke ${id}");
     int confirm = pressed == false ? 0 : 1;

@@ -38,9 +38,24 @@ class _ChatPageState extends State<ChatPage> {
       await _chatService.sendMessages(
         widget.receiverUid,
         _messageController.text,
+        imgUrl,
+      );
+      imgUrl = null;
+      _messageController.clear();
+    }
+    if (pickedFile != null && _messageController.text.isEmpty) {
+      await upFoto();
+    }
+    if (pickedFile != null && _messageController.text.isNotEmpty) {
+      upFoto();
+      await _chatService.sendMessages(
+        widget.receiverUid,
+        _messageController.text,
+        imgUrl,
       );
       _messageController.clear();
     }
+    ;
   }
 
   void insertphoto() async {

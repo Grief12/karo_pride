@@ -27,12 +27,13 @@ class _FetchPostState extends State<FetchPost> {
   late int likes = widget.like;
   late int posId = widget.id;
   final currentUser = FirebaseAuth.instance.currentUser!;
-  String? user;
+  bool user = true;
   var arrData;
   late List likearrConf = widget.arrLikes
       .where((element) => element['post_id'] == widget.id)
       .toList();
   bool pressed = true;
+  late String? email = currentUser.email;
 
   searchData() {
     for (int i = 0; i < likearrConf.length; i++) {
@@ -47,8 +48,8 @@ class _FetchPostState extends State<FetchPost> {
     super.initState();
     arrData = searchData();
     pressed = arrData == currentUser.email ? false : true;
-    user = currentUser.email;
     likes = likearrConf.length;
+    user = currentUser.email == widget.email ? false : true;
   }
 
   @override
@@ -182,9 +183,7 @@ class _FetchPostState extends State<FetchPost> {
                           IconButton(
                               onPressed: () {
                                 setState(() {
-                                  print(pressed);
                                   pressed = !pressed;
-                                  print(pressed);
                                   if (pressed == true && likes > 0) {
                                     likes = likes - 1;
                                   } else if (pressed != true && likes == 0) {
@@ -226,7 +225,7 @@ class _FetchPostState extends State<FetchPost> {
                                             widget.id, widget.profile)));
                               },
                               icon: Icon(Icons.comment_outlined)),
-                          user == currentUser.email
+                          user == false
                               ? IconButton(
                                   onPressed: () async {
                                     await Api()
