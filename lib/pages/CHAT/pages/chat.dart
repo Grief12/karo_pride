@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:b_social02/Api.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 class Chat extends StatefulWidget {
   const Chat({super.key});
@@ -12,13 +11,10 @@ class Chat extends StatefulWidget {
   State<Chat> createState() => _ChatState();
 }
 
-class _ChatState extends State<Chat> {
+class _ChatState extends State<Chat> with WidgetsBindingObserver {
+  Map<String, dynamic>? userMap;
   Api api = Api();
-  final currentUser = FirebaseAuth.instance.currentUser!;
-
-  void signOut() {
-    FirebaseAuth.instance.signOut();
-  }
+  final currentUser = FirebaseAuth.instance.currentUser;
 
   //instance of auth
   @override
@@ -26,14 +22,8 @@ class _ChatState extends State<Chat> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text("Chat"),
+        title: const Text("Chat"),
         backgroundColor: Colors.grey[900],
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: signOut,
-          )
-        ],
       ),
       body: _buildUserList(),
     );
@@ -46,6 +36,9 @@ class _ChatState extends State<Chat> {
           if (snapshot.hasError) {
             return const Text('error');
           }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Text('loading..');
+          }
           return ListView(
             children:
                 snapshot.data!.docs.map((doc) => _buildUserItem(doc)).toList(),
@@ -57,30 +50,32 @@ class _ChatState extends State<Chat> {
   Widget _buildUserItem(DocumentSnapshot document) {
     Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
 
-    if (currentUser.email != data['email']) {
+    if (currentUser!.email != data['email']) {
       return ListTile(
         title: Expanded(
           child: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               border: Border(
                 bottom: BorderSide(
-                  color: const Color.fromARGB(255, 138, 137, 137),
+                  color: Color.fromARGB(255, 138, 137, 137),
                 ),
               ),
             ),
-            padding: EdgeInsets.fromLTRB(0, 25, 0, 25),
+            padding: const EdgeInsets.fromLTRB(0, 25, 0, 25),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Column(
+                const Column(
                   children: [
                     Icon(Icons.message_outlined),
                   ],
                 ),
                 const SizedBox(width: 20),
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(data['email']),
+                    const SizedBox(height: 5),
                   ],
                 ),
               ],
@@ -102,38 +97,4 @@ class _ChatState extends State<Chat> {
     }
     return Container();
   }
-
-  //   return FutureBuilder(
-  //       future: api.fetchChat(currentUser.email!),
-  //       builder: (context, snapshot) {
-  //         if (snapshot.hasData) {
-  //           return ListView.builder(
-  //               itemCount: snapshot.data['akun'].length,
-  //               itemBuilder: (context, index) {
-  //                 final post = snapshot.data['akun'][index];
-  //                 return FetchChat(
-  //                   post['username'],
-  //                   post['email'],
-  //                   () {
-  //                     //pass the clicked user
-  //                     PersistentNavBarNavigator.pushNewScreen(
-  //                       context,
-  //                       withNavBar: false,
-  //                       screen: ChatPage(
-  //                         receiverUsername: post['username'],
-  //                         receiverEmail: post['email'],
-  //                       ),
-  //                     );
-  //                   },
-  //                 );
-  //               });
-  //         }
-  //         return Center(
-  //           child: Column(
-  //             mainAxisAlignment: MainAxisAlignment.center,
-  //             children: [CircularProgressIndicator(), Text('Please wait')],
-  //           ),
-  //         );
-  //       });
-  // }
 }
