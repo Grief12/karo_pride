@@ -57,6 +57,7 @@ class _FetchPostState extends State<FetchPost> {
     return Padding(
       padding: EdgeInsets.only(bottom: 5),
       child: Container(
+        padding: EdgeInsets.only(top: 16),
         width: 500,
         child: Column(
           children: [
@@ -196,6 +197,7 @@ class _FetchPostState extends State<FetchPost> {
                                 });
                                 Api().postLikeConfirm(
                                     widget.id, pressed, currentUser.email!);
+
                                 //Api().like(widget.id, pressed);
                                 //postLikeToFirebase();
                               },

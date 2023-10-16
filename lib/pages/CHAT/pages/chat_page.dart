@@ -38,21 +38,20 @@ class _ChatPageState extends State<ChatPage> {
       await _chatService.sendMessages(
         widget.receiverUid,
         _messageController.text,
-        imgUrl,
       );
-      imgUrl = null;
       _messageController.clear();
     }
     if (pickedFile != null && _messageController.text.isEmpty) {
       await upFoto();
+      imgUrl = null;
     }
     if (pickedFile != null && _messageController.text.isNotEmpty) {
-      upFoto();
+      await upFoto();
       await _chatService.sendMessages(
         widget.receiverUid,
         _messageController.text,
-        imgUrl,
       );
+      imgUrl = null;
       _messageController.clear();
     }
     ;
@@ -91,6 +90,10 @@ class _ChatPageState extends State<ChatPage> {
       snapshot;
       urlImg;
       imgUrl = urlImg;
+      _chatService.sendMessages(
+        widget.receiverUid,
+        imgUrl!,
+      );
     } on firebase_storage.FirebaseStorage catch (e) {
       print(e);
     }
