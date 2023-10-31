@@ -31,13 +31,13 @@ class ChatBubble extends StatelessWidget {
                     ),
                   ),
                 ),
-              child: Container(
-                          alignment: Alignment.topRight,
-                          padding: EdgeInsets.all(10),
-                          width: 300,
-                          height: 300,
-                          child: Image.network(message),
-                        ),
+                child: Container(
+                  alignment: Alignment.topRight,
+                  padding: EdgeInsets.all(10),
+                  width: 300,
+                  height: 300,
+                  child: Image.network(message),
+                ),
               )
             : Container(
                 padding: const EdgeInsets.all(12),
