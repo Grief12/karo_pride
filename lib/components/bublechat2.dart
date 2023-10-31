@@ -38,6 +38,7 @@ class ChatBubble2 extends StatelessWidget {
                   height: 300,
                   child: Image.network(message),
                 ),
+
               )
             : Container(
                 padding: const EdgeInsets.all(12),

@@ -70,6 +70,8 @@ class _FetchPostState extends State<FetchPost> {
                     height: 15,
                   ),
                   Container(
+                    height: 35,
+                    width: 35,
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(color: Colors.grey)),
