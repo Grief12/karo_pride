@@ -37,7 +37,12 @@ class _ChatState extends State<Chat> with WidgetsBindingObserver {
             return const Text('error');
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Text('loading..');
+            return const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [CircularProgressIndicator(), Text('Please wait')],
+              ),
+            );
           }
           return ListView(
             children:

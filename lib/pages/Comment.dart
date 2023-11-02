@@ -88,6 +88,8 @@ class _CommentState extends State<Comment> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Container(
+                                        height: 35,
+                                        width: 35,
                                         decoration: BoxDecoration(
                                             shape: BoxShape.circle,
                                             border:
@@ -101,7 +103,7 @@ class _CommentState extends State<Comment> {
                                                   size: 25,
                                                 )
                                               : Image.network(
-                                                  widget.profile,
+                                                  komen['profile'],
                                                   fit: BoxFit.cover,
                                                 ),
                                         ),
