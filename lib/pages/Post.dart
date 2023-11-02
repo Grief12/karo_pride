@@ -126,7 +126,14 @@ class _CreateState extends State<Create> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Image.file(File(pickedFile!.path ?? '')),
+                                    Padding(
+                                      child: Image.file(
+                                        File(pickedFile!.path ?? ''),
+                                        width: 300,
+                                        height: 300,
+                                      ),
+                                      padding: EdgeInsets.all(15),
+                                    ),
                                     Text(pickedFile!.name)
                                   ],
                                 ),
