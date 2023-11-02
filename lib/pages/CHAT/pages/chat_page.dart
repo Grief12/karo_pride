@@ -138,6 +138,14 @@ class _ChatPageState extends State<ChatPage> {
           if (snapshot.hasError) {
             return Text('Error${snapshot.error}');
           }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [CircularProgressIndicator(), Text('Please wait')],
+              ),
+            );
+          }
           return ListView(
             children: snapshot.data!.docs
                 .map((document) => _buildMessageItem(document))
